@@ -39,6 +39,11 @@ def explain(probs, heat, info, class_names):
         lines = [templates["unsure_headline"], templates["top_guesses"].format(
             a=ci.get("short_name", ci["display_name"]), pa=percentage_label(conf),
             b=c2i.get("short_name", c2i["display_name"]), pb=percentage_label(conf2))]
+        if healthy:
+            lines.append(templates["healthy_unsure_note"].format(
+                name=ci.get("short_name", ci["display_name"]),
+                pct=percentage_label(conf),
+                cutoff=percentage_label(cutoff)))
         lines += [item["text"] for item in info["uncertain_result"]["what_to_do"]]
         lines.append(templates["heatmap_note"])
         status = "unsure"

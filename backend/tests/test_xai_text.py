@@ -19,3 +19,15 @@ def test_attention_does_not_change_confidence_decision():
     sparse = np.zeros((224, 224))
     sparse[10:20, 10:20] = 1
     assert explain(probabilities, sparse, info, CLASS_NAMES)["status"] == explain(probabilities, np.ones((224, 224)), info, CLASS_NAMES)["status"]
+
+
+def test_healthy_nut_below_conservative_cutoff_explains_the_unsure_label():
+    probabilities = np.array([.02, .925, .04, .015])
+    result = explain(probabilities, np.zeros((224, 224)), load_disease_info(), CLASS_NAMES)
+    assert result["status"] == "unsure"
+    assert result["class_id"] == "Healthy_Nut"
+    assert result["threshold"] == .95
+    explanation = " ".join(result["lines"])
+    assert "92.5%" in explanation
+    assert "95.0%" in explanation
+    assert "does not mean the plant is diseased" in explanation

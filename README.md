@@ -99,6 +99,7 @@ Class order: Healthy_Leaf, Healthy_Nut, Mahali_Koleroga, Yellow_Leaf. Healthy re
 ## Data, history and limitations
 
 - Welcome page → language selection → photo screening. English, Kannada, Hindi and Malayalam are available across navigation, results, explanations and the guide. Regional translations are drafts pending native-speaker and agricultural review. Regional guides condense source guidance into basic care advice; they are not complete word-for-word translations of historical treatment instructions.
+- The in-page ArecaLens help panel answers from the already-loaded field guide and latest screening result. It makes no external chatbot/API call and is a fixed guide-based helper, not a generative diagnosis service. The field guide is general reference information and does not change the latest photo result.
 - History stores up to eight resized scans in localStorage on this browser/device; raw uploads are not saved to the backend filesystem. Deployment operators must separately control proxy/server logs and storage policies.
 - The disease guide is the supplied draft. Expert review of treatment guidance, especially historical doses and schedules, remains outstanding. The unverified Bordeaux recipe and items explicitly marked `verify` are not displayed.
 - The model has no unrelated-object/OOD class. It can confidently classify unsupported inputs. Use actual arecanut leaves/nuts and get expert confirmation.

@@ -80,7 +80,7 @@
       "status": "no_disease_found",
       "severity": "none",
       "summary": {
-        "text": "This nut looks healthy in the photo. No signs of fruit rot (Mahali or Koleroga) were found.",
+        "text": "The model leans toward the healthy nut class for this photo. This is a screening suggestion; one photo cannot rule out early fruit rot.",
         "sources": []
       },
       "signs_to_watch": [
@@ -106,28 +106,25 @@
       ],
       "what_to_do": [
         {
-          "text": "Collect fallen nuts regularly and destroy them.",
-          "sources": [
-            "S1",
-            "S3"
-          ]
+          "text": "No disease-control treatment is suggested by this screening result alone. Continue your usual garden care.",
+          "sources": []
         },
         {
-          "text": "In heavy-rain areas, the standard advice is a protective 1% Bordeaux mixture spray on the bunches before the disease appears: first spray after the pre-monsoon showers, second spray 40 to 45 days later.",
+          "text": "Check the same bunch after prolonged wet weather, or if nuts begin to fall.",
           "sources": [
             "S1",
             "S2"
           ]
         },
         {
-          "text": "Covering bunches with polythene covers is another way to protect them.",
+          "text": "If nuts show dark, water-soaked patches, rot, or fall repeatedly, show the bunch to an agricultural officer or KVK.",
           "sources": [
             "S2"
           ]
         }
       ],
       "limits": {
-        "text": "A photo cannot show an infection that has not become visible yet. In our tests, 3 of 522 Mahali/Koleroga photos were called healthy nuts. If nuts are falling in your garden, ask an expert.",
+        "text": "The model checks visible signs in this photo; early disease can be missed. If nuts show dark, water-soaked patches or keep falling, ask an agricultural officer or KVK to check the bunch.",
         "sources": []
       },
       "ripe_note": {
@@ -586,6 +583,7 @@
     "templates": {
       "unsure_headline": "I am not sure about this photo.",
       "top_guesses": "The model's two closest guesses were {a} ({pa}%) and {b} ({pb}%).",
+      "healthy_unsure_note": "The top guess is {name} ({pct}%). This app only shows a healthy result at {cutoff}% or higher, so it keeps this result as ‘not sure’. That cautious rule does not mean the plant is diseased.",
       "headline_healthy": "Healthy appearance suggested: {name}. A photo cannot rule out disease.",
       "headline_suspected": "Suspected: {name}.",
       "conf_high": "The model strongly favours this class (relative score: {pct}%). This does not confirm a diagnosis.",

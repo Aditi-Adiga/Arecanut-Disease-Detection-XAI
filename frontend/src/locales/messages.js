@@ -1,3 +1,5 @@
+import { extraMessages } from './extraMessages';
+
 export const LANGUAGES = [
   { code: 'en', name: 'English', english: 'English', locale: 'en-IN' },
   { code: 'kn', name: 'ಕನ್ನಡ', english: 'Kannada', locale: 'kn-IN' },
@@ -61,5 +63,5 @@ export const messages = {
 };
 
 export function translator(language = 'en') {
-  return (key, values = {}) => Object.entries(values).reduce((text, [name, value]) => text.replaceAll(`{${name}}`, String(value)), messages[language]?.[key] ?? messages.en[key] ?? key);
+  return (key, values = {}) => Object.entries(values).reduce((text, [name, value]) => text.replaceAll(`{${name}}`, String(value)), messages[language]?.[key] ?? extraMessages[language]?.[key] ?? messages.en[key] ?? extraMessages.en[key] ?? key);
 }

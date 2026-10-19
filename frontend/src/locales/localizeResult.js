@@ -11,6 +11,9 @@ export function localizeResult(result, info, t) {
   if (result.status === 'unsure') {
     lines = [T.unsure_headline];
     if (second) lines.push(fill(T.top_guesses, { a: ci.short_name, pa: pct(result.confidence), b: info.classes[second.class_id].short_name, pb: pct(second.probability) }));
+    if (ci.status === 'no_disease_found' && T.healthy_unsure_note) {
+      lines.push(fill(T.healthy_unsure_note, { name: ci.short_name, pct: pct(result.confidence), cutoff: pct(th.healthy_below) }));
+    }
     lines.push(...info.uncertain_result.what_to_do.map(item => item.text), T.heatmap_note);
   } else {
     const healthy = result.status === 'healthy';
@@ -23,6 +26,8 @@ export function localizeResult(result, info, t) {
     lines.push(T.heatmap_note);
   }
   return { ...result, language: info.language, display_name: ci.display_name,
+    healthy_guess_below_threshold: result.status === 'unsure' && ci.status === 'no_disease_found',
+    healthy_cutoff: th.healthy_below,
     probabilities: result.probabilities.map(item => ({ ...item, label: info.classes[item.class_id].short_name })),
     explanation: { ...result.explanation, lines }, scope_note: t('scope'),
     photo_tips: result.photo_tips.map(tip => tip.includes('dark') ? t('darkTip') : tip.includes('bright') ? t('brightTip') : tip) };

@@ -26,5 +26,14 @@ def test_translated_explanation_keeps_decision(language):
     assert translated['lines'][0] != load_disease_info()['explanation']['templates']['unsure_headline']
 
 
+@pytest.mark.parametrize("language", ["kn", "hi", "ml"])
+def test_translated_healthy_guess_explains_the_95_percent_cutoff(language):
+    probabilities = np.array([.02, .925, .04, .015])
+    translated = explain(probabilities, np.zeros((224, 224)), load_disease_info(language), CLASS_NAMES)
+    assert translated["status"] == "unsure"
+    assert any("95.0%" in line for line in translated["lines"])
+    assert all("{name}" not in line and "{cutoff}" not in line for line in translated["lines"])
+
+
 def test_unsupported_language_is_rejected(client):
     assert client.get('/api/diseases?language=unknown').status_code == 422
