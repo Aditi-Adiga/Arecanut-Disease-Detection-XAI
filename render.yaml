@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: arecalens-xai
+    runtime: docker
+    plan: free
+    region: singapore
+    branch: codex/arecalens-webapp
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/ready
+    autoDeploy: false
+    envVars:
+      - key: PORT
+        value: "10000"
+      - key: TF_CPP_MIN_LOG_LEVEL
+        value: "2"
+      - key: TF_NUM_INTRAOP_THREADS
+        value: "1"
+      - key: TF_NUM_INTEROP_THREADS
+        value: "1"
+      - key: OMP_NUM_THREADS
+        value: "1"

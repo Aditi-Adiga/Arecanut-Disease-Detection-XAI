@@ -1,0 +1,28 @@
+# React
+node_modules/
+dist/
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Secrets
+.env
+.env.*
+
+# Trained AI models (stored separately)
+*.keras
+*.h5
+*.tflite
+!backend/models/mobilenetv3small.keras
+
+# OS files
+.DS_Store
+
+# Tests and local verification
+.pytest_cache/
+coverage/
+work/
+parity-results.json
+colab-parity-results.json

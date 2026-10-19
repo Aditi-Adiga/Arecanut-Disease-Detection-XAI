@@ -1,0 +1,608 @@
+{
+  "version": "0.3-draft",
+  "last_checked": "2026-10-17",
+  "language": "en",
+  "review_status": "DRAFT. Must be reviewed by an agricultural officer or plant pathologist before release.",
+  "disclaimer": {
+    "text": "This app gives a first guess from a photo and it can be wrong. It does not replace advice from an agricultural officer, a Krishi Vigyan Kendra (KVK) or ICAR-CPCRI. When you use any spray, follow the label and safety rules.",
+    "sources": []
+  },
+  "classes": {
+    "Healthy_Leaf": {
+      "display_name": "Healthy leaf",
+      "status": "no_disease_found",
+      "severity": "none",
+      "summary": {
+        "text": "This leaf looks healthy in the photo. No signs of Yellow Leaf Disease or leaf spot were found.",
+        "sources": []
+      },
+      "signs_to_watch": [
+        {
+          "text": "Yellow tips on the outer leaves, often with green stripes along the edges.",
+          "sources": [
+            "S2",
+            "S4"
+          ]
+        },
+        {
+          "text": "Small brown or black round spots with a yellow ring (leaf spot).",
+          "sources": [
+            "S2"
+          ]
+        },
+        {
+          "text": "Check more often from September to November, when yellowing is easiest to see.",
+          "sources": [
+            "S2"
+          ]
+        }
+      ],
+      "what_to_do": [
+        {
+          "text": "Keep good drainage so water does not stand around the palms.",
+          "sources": [
+            "S2"
+          ]
+        },
+        {
+          "text": "Keep up regular fertilizer and organic manure as advised for your area.",
+          "sources": [
+            "S2"
+          ]
+        },
+        {
+          "text": "Take a new photo if you notice any change in the leaves.",
+          "sources": []
+        }
+      ],
+      "limits": {
+        "text": "One photo cannot show early or hidden disease. If the palm looks unwell in any way, ask an expert even if this result says healthy.",
+        "sources": []
+      },
+      "check_signs": [
+        {
+          "text": "Yellow leaf tips with green stripes along the edges",
+          "sources": [
+            "S2"
+          ]
+        },
+        {
+          "text": "Small brown or black round spots with a yellow ring",
+          "sources": [
+            "S2"
+          ]
+        }
+      ],
+      "short_name": "Healthy leaf"
+    },
+    "Healthy_Nut": {
+      "display_name": "Healthy nut",
+      "status": "no_disease_found",
+      "severity": "none",
+      "summary": {
+        "text": "This nut looks healthy in the photo. No signs of fruit rot (Mahali or Koleroga) were found.",
+        "sources": []
+      },
+      "signs_to_watch": [
+        {
+          "text": "A water-soaked patch near the top (calyx end) of the nut, and the nut loses its shine.",
+          "sources": [
+            "S1",
+            "S2"
+          ]
+        },
+        {
+          "text": "Dark green patches that spread over the nut, then the nut rots and falls.",
+          "sources": [
+            "S1"
+          ]
+        },
+        {
+          "text": "Check after heavy rain, because the disease spreads in wet monsoon weather.",
+          "sources": [
+            "S1"
+          ]
+        }
+      ],
+      "what_to_do": [
+        {
+          "text": "Collect fallen nuts regularly and destroy them.",
+          "sources": [
+            "S1",
+            "S3"
+          ]
+        },
+        {
+          "text": "In heavy-rain areas, the standard advice is a protective 1% Bordeaux mixture spray on the bunches before the disease appears: first spray after the pre-monsoon showers, second spray 40 to 45 days later.",
+          "sources": [
+            "S1",
+            "S2"
+          ]
+        },
+        {
+          "text": "Covering bunches with polythene covers is another way to protect them.",
+          "sources": [
+            "S2"
+          ]
+        }
+      ],
+      "limits": {
+        "text": "A photo cannot show an infection that has not become visible yet. In our tests, 3 of 522 Mahali/Koleroga photos were called healthy nuts. If nuts are falling in your garden, ask an expert.",
+        "sources": []
+      },
+      "ripe_note": {
+        "text": "Ripe nuts can be orange or yellow. Colour alone is not a sign of disease, so compare nuts that are equally ripe.",
+        "sources": [],
+        "verify": true
+      },
+      "check_signs": [
+        {
+          "text": "A water-soaked patch near the top of the nut",
+          "sources": [
+            "S1"
+          ]
+        },
+        {
+          "text": "Nuts that darken, rot and fall after rain",
+          "sources": [
+            "S1"
+          ]
+        }
+      ],
+      "short_name": "Healthy nut"
+    },
+    "Mahali_Koleroga": {
+      "display_name": "Mahali / Koleroga (fruit rot)",
+      "status": "disease_suspected",
+      "severity": "serious",
+      "summary": {
+        "text": "This photo looks consistent with fruit rot of areca nut, called Mahali or Koleroga. It is a disease that spreads in wet monsoon weather and rots the nuts. Only an expert can confirm it.",
+        "sources": [
+          "S1",
+          "S2"
+        ]
+      },
+      "what_it_means": [
+        {
+          "text": "Nuts get water-soaked patches, turn dark, rot and fall.",
+          "sources": [
+            "S1",
+            "S2"
+          ]
+        },
+        {
+          "text": "A white mould can grow on the fallen nuts.",
+          "sources": [
+            "S1",
+            "S2"
+          ]
+        },
+        {
+          "text": "Infected nuts usually fall without the small calyx cap at the top.",
+          "sources": [
+            "S2"
+          ]
+        },
+        {
+          "text": "In bad cases the nut stalks are also affected.",
+          "sources": [
+            "S2"
+          ]
+        }
+      ],
+      "possible_causes": [
+        {
+          "text": "A Phytophthora organism (Phytophthora meadii) infects the nuts.",
+          "sources": [
+            "S2",
+            "S5"
+          ]
+        },
+        {
+          "text": "It spreads in cool, humid weather, when heavy rain alternates with short sunny spells during the south-west monsoon.",
+          "sources": [
+            "S1"
+          ]
+        }
+      ],
+      "what_to_do": [
+        {
+          "text": "Collect fallen and rotten nuts regularly and destroy them, for example by burning, so the disease does not spread.",
+          "sources": [
+            "S1",
+            "S3"
+          ]
+        },
+        {
+          "text": "Spray the bunches with 1% Bordeaux mixture as protection: first spray after the pre-monsoon showers, second spray 40 to 45 days later, and a third spray if the monsoon goes on for long.",
+          "sources": [
+            "S1",
+            "S2"
+          ]
+        },
+        {
+          "text": "Spray finely so the whole bunch is covered.",
+          "sources": [
+            "S1"
+          ]
+        },
+        {
+          "text": "Covering bunches with polythene covers (125 gauge, 75 x 60 cm) also worked very well as a barrier.",
+          "sources": [
+            "S2"
+          ]
+        },
+        {
+          "text": "Spraying after the disease is already spreading often does not control it well, so do not wait. Talk to an agricultural officer if many nuts are falling.",
+          "sources": [
+            "S9"
+          ]
+        }
+      ],
+      "when_to_get_help": [
+        {
+          "text": "If the new spindle leaf in the crown turns yellow, then brown, or the crown looks rotten, get expert help at once. This can be bud rot or crown rot, caused by the same organism.",
+          "sources": [
+            "S2"
+          ]
+        }
+      ],
+      "limits": {
+        "text": "This result is only a guess from one photo. Several nuts from the same bunch or garden can help the expert decide.",
+        "sources": []
+      },
+      "also_consider": [
+        {
+          "name": "Button shedding",
+          "text": {
+            "text": "Young nuts and buttons can also fall because of poor pollination, lack of nutrients, water stress or heat. Look for a water-soaked patch before deciding it is Mahali.",
+            "sources": [
+              "S2"
+            ]
+          }
+        },
+        {
+          "name": "Nut splitting",
+          "text": {
+            "text": "Nuts that split at the tip are a different problem linked to growing conditions, not Mahali.",
+            "sources": [
+              "S2"
+            ]
+          }
+        }
+      ],
+      "check_signs": [
+        {
+          "text": "A water-soaked, dark green patch on the nut, usually near the top",
+          "sources": [
+            "S1"
+          ]
+        },
+        {
+          "text": "Nuts that rot and fall, sometimes with white mould on the fallen nut",
+          "sources": [
+            "S1",
+            "S2"
+          ]
+        }
+      ],
+      "short_name": "Mahali / Koleroga (fruit rot)"
+    },
+    "Yellow_Leaf": {
+      "display_name": "Yellow leaf disease or leaf spotting (please confirm)",
+      "status": "disease_suspected",
+      "severity": "serious",
+      "summary": {
+        "text": "This photo shows yellowing or spotting of leaves. It can be consistent with Yellow Leaf Disease. Spotted leaves can also mean a leaf spot disease, so please confirm with an expert.",
+        "sources": [
+          "S2"
+        ]
+      },
+      "what_it_means": [
+        {
+          "text": "Yellowing starts at the tips of the leaflets on the outer leaves and spreads along the edges, with green stripes left between.",
+          "sources": [
+            "S2",
+            "S4"
+          ]
+        },
+        {
+          "text": "Leaf tips dry out. Later the leaves become small, stiff and pointed, and the crown gets smaller.",
+          "sources": [
+            "S2"
+          ]
+        },
+        {
+          "text": "The roots turn black and rot. Nuts can be small and fall early.",
+          "sources": [
+            "S2"
+          ]
+        },
+        {
+          "text": "The signs are clearest from September to November and may fade in summer.",
+          "sources": [
+            "S2"
+          ]
+        }
+      ],
+      "possible_causes": [
+        {
+          "text": "ICAR-CPCRI links Yellow Leaf Disease to a phytoplasma spread by a plant hopper.",
+          "sources": [
+            "S2"
+          ]
+        },
+        {
+          "text": "The cause is not fully settled. One Indian study did not find a phytoplasma in the palms it tested, and a later study notes that similar yellowing has been linked to different pathogens in different regions.",
+          "sources": [
+            "S6",
+            "S7"
+          ]
+        }
+      ],
+      "what_to_do": [
+        {
+          "text": "There is no spray that cures this disease, so good care of the garden is the main defence.",
+          "sources": [
+            "S2"
+          ]
+        },
+        {
+          "text": "Give fertilizer regularly in two splits each year. ICAR-CPCRI advises 100 g nitrogen, 40 g phosphorus and 140 g potash per palm per year, plus 800 g Mussorie phos, and 12 kg each of compost and green leaf per palm per year. Confirm current doses with your agricultural officer.",
+          "sources": [
+            "S2"
+          ]
+        },
+        {
+          "text": "Avoid water standing in the garden by keeping good drainage, and grow cover crops between palms.",
+          "sources": [
+            "S2"
+          ]
+        },
+        {
+          "text": "Removing badly affected palms can slow the spread.",
+          "sources": [
+            "S2",
+            "S8"
+          ]
+        },
+        {
+          "text": "Do not use antibiotic or insecticide sprays on your own. Some web pages list them, but ICAR-CPCRI says ordinary plant protection does not control this disease. Ask an agricultural officer first.",
+          "sources": [
+            "S2"
+          ]
+        }
+      ],
+      "also_consider": [
+        {
+          "name": "Leaf spot",
+          "text": {
+            "text": "Small brown to black round spots with a yellow ring, mostly in the monsoon and more common on palms under 10 years old, usually on the lower leaves. A 1% Bordeaux mixture spray is listed for it.",
+            "sources": [
+              "S2"
+            ]
+          }
+        },
+        {
+          "name": "Foot rot (Anabe roga)",
+          "text": {
+            "text": "Yellowing of the outer leaves, which then droop and fall, with a brown patch or brown ooze at the base of the trunk. This needs expert help.",
+            "sources": [
+              "S2"
+            ]
+          }
+        },
+        {
+          "name": "Bud rot or crown rot",
+          "text": {
+            "text": "The new spindle leaf in the crown turns yellow, then brown and rots, or the outer leaves yellow and dry from the base. This is urgent, so get expert help at once.",
+            "sources": [
+              "S2"
+            ]
+          }
+        }
+      ],
+      "limits": {
+        "text": "The photos used to teach this app include spotted leaves as well as yellow leaves, so this result may mean either one. Treat it as a reason to get the palm checked.",
+        "sources": []
+      },
+      "check_signs": [
+        {
+          "text": "Yellow leaf tips on the outer leaves, spreading along the edges with green stripes left between",
+          "sources": [
+            "S2"
+          ]
+        },
+        {
+          "text": "Separate brown or black round spots with a yellow ring (this points to leaf spot instead)",
+          "sources": [
+            "S2"
+          ]
+        }
+      ],
+      "short_name": "Yellow leaf disease or leaf spot"
+    }
+  },
+  "uncertain_result": {
+    "message": {
+      "text": "I am not sure about this photo.",
+      "sources": []
+    },
+    "suggested_confidence_threshold": 0.7,
+    "threshold_note": "Starting value. Choose the final threshold on the validation set, not the test set.",
+    "what_to_do": [
+      {
+        "text": "Take another photo in daylight, hold the camera steady and fill the frame with the leaf or nut.",
+        "sources": []
+      },
+      {
+        "text": "Photograph the same plant from another angle.",
+        "sources": []
+      },
+      {
+        "text": "If you are worried, show the palm to an agricultural officer or a KVK.",
+        "sources": []
+      }
+    ]
+  },
+  "bordeaux_mixture_recipe": {
+    "title": "How to make 1% Bordeaux mixture (100 litres)",
+    "verify": "The scan of source S1 is partly unclear about the lime quantity. Confirm 1 kg lime with a local agricultural officer before release.",
+    "steps": [
+      {
+        "text": "Dissolve 1 kg of copper sulphate in 50 litres of water.",
+        "sources": [
+          "S1"
+        ]
+      },
+      {
+        "text": "In a separate vessel, mix 1 kg of lime in 50 litres of water.",
+        "sources": [
+          "S1"
+        ]
+      },
+      {
+        "text": "Mix the two solutions just before spraying.",
+        "sources": [
+          "S1"
+        ]
+      },
+      {
+        "text": "Test it: dip a polished iron knife or nail in the mixture. A brown coating means too much copper, so add more lime until the coating stops appearing.",
+        "sources": [
+          "S1"
+        ]
+      },
+      {
+        "text": "Use only copper, wooden or plastic vessels, not other metals.",
+        "sources": [
+          "S1"
+        ]
+      }
+    ],
+    "safety": {
+      "text": "General safety advice, not from the sources: wear gloves, a mask and eye protection, keep children and animals away, and wash your hands after spraying.",
+      "sources": []
+    }
+  },
+  "sources": {
+    "S1": {
+      "title": "Koleroga (Mahali) of arecanut, Extension Folder No. 17",
+      "publisher": "ICAR-CPCRI, Kasaragod",
+      "year": "1989",
+      "url": "https://cpcri.gov.in/filemgr/webfs/publication/ext17.pdf",
+      "used_for": "Koleroga symptoms, 1% Bordeaux spray timing, destroying fallen nuts, Bordeaux preparation"
+    },
+    "S2": {
+      "title": "Disease management strategies in arecanut and cocoa, Extension Publication No. 69",
+      "publisher": "ICAR-CPCRI, Regional Station Vittal",
+      "year": "1999",
+      "url": "https://cpcri.icar.gov.in/filemgr/webfs/publication/disease_management_strategies_in_arecanut_and_cocoa(eng)_1.pdf",
+      "used_for": "Koleroga, bud and crown rot, Yellow Leaf Disease symptoms and management, leaf spot, foot rot, polythene covers"
+    },
+    "S3": {
+      "title": "Arecanut: Mahali / Kolerogo / fruit rot",
+      "publisher": "TNAU Agritech Portal",
+      "year": "2015",
+      "url": "https://agritech.tnau.ac.in/crop_protection/arecanut_diseases_3.html",
+      "used_for": "Collecting and burning fallen nuts"
+    },
+    "S4": {
+      "title": "Arecanut: Yellow leaf disease",
+      "publisher": "TNAU Agritech Portal",
+      "year": "2015",
+      "url": "https://agritech.tnau.ac.in/crop_protection/arecanut_diseases_2.html",
+      "used_for": "Yellow Leaf Disease symptoms"
+    },
+    "S5": {
+      "title": "Management of fruit rot disease of arecanut (Areca catechu L.) caused by Phytophthora meadii",
+      "publisher": "ICAR KRISHI repository (ICAR-CPCRI)",
+      "year": "2019",
+      "url": "https://krishi.icar.gov.in/jspui/handle/123456789/81837",
+      "used_for": "Cause of fruit rot (Phytophthora meadii)"
+    },
+    "S6": {
+      "title": "Adkar-Purushothama et al., phytoplasma detection in yellow leaf disease affected areca palms",
+      "publisher": "Bulletin of Insectology 60(2)",
+      "year": "2007",
+      "url": "https://archive.bulletinofinsectology.org/pdfarticles/vol60-2007-161-162adkarpurushothama.pdf",
+      "used_for": "No phytoplasma found in the palms tested"
+    },
+    "S7": {
+      "title": "Detection of the phytoplasmas associated with yellow leaf disease of Areca catechu L. in Hainan province of China by nested PCR",
+      "publisher": "Chinese Agricultural Science Bulletin 26(22)",
+      "year": "2010",
+      "url": "https://www.casb.org.cn/EN/Y2010/V26/I22/381",
+      "used_for": "Similar yellowing symptoms linked to different pathogens in different regions"
+    },
+    "S8": {
+      "title": "Arecanut: Yellow Leaf Disease (Phytoplasma)",
+      "publisher": "Kerala Agricultural University",
+      "year": "not stated",
+      "url": "https://celkau.in/crops/plantation/arecanut/yellowleaf.php",
+      "used_for": "Removing affected palms. Its antibiotic and insecticide recommendations were deliberately not used."
+    },
+    "S9": {
+      "title": "Role of systemic fungicide metalaxyl mancozeb in management of Koleroga of arecanut in Central Western Ghats of Karnataka",
+      "publisher": "Journal article (i-Scholar listing)",
+      "year": "not stated",
+      "url": "https://www.i-scholar.in/index.php/Ajbs/article/view/153564",
+      "used_for": "Bordeaux spray after the disease appears does not give satisfactory control"
+    }
+  },
+  "placeholders": [
+    "PLACEHOLDER: Kannada and Malayalam translations (and Hindi if needed), reviewed by a native speaker who knows farming.",
+    "PLACEHOLDER: have an agricultural officer, KVK scientist or ICAR-CPCRI regional station review every statement. Sources S1 and S2 are from 1989 and 1999, so spray schedules and fertilizer doses must be confirmed as current.",
+    "PLACEHOLDER: confirm the dataset's Yellow_Leaf class. Its photos include spotted leaves, so ask the dataset authors or an expert whether it mixes Yellow Leaf Disease and leaf spot.",
+    "PLACEHOLDER: add a verified local helpline or KVK contact. Do not add a number until it has been checked.",
+    "PLACEHOLDER: add a short bud rot and crown rot entry if the app should recognise that case, since it is the most urgent one for palm owners.",
+    "PLACEHOLDER: choose the final confidence threshold on the validation set.",
+    "PLACEHOLDER: ask an expert to confirm that ripe areca nuts can be orange or yellow (the ripe_note in Healthy_Nut). It was not found in the CPCRI documents I read.",
+    "PLACEHOLDER: the attached guidance text lists magnesium deficiency as a yellow-leaf look-alike. I did not find it in the CPCRI document it cites, so it is left out until an expert confirms it.",
+    "PLACEHOLDER: calibrate thresholds.unsure_below and thresholds.spread_below on the validation set.",
+    "PLACEHOLDER: re-check thresholds.unsure_below and thresholds.healthy_below after the real farm photo test, since they were tuned on dataset photos."
+  ],
+  "explanation": {
+    "thresholds": {
+      "unsure_below": 0.7,
+      "high_at": 0.9,
+      "second_choice_at": 0.15,
+      "spread_below": 0.38,
+      "several_areas_above": 0.25,
+      "note": "unsure_below 0.70 and healthy_below 0.95 were chosen on the validation set (1,329 photos): at 0.95 none of the 8 diseased photos called healthy got through (the most confident miss was 0.94). spread_below 0.38 is about the 10th percentile of heat concentration; concentration did not separate right from wrong predictions, so it is only a photo tip. Re-check all three after testing on real farm photos.",
+      "healthy_below": 0.95
+    },
+    "positions": {
+      "upper_left": "upper left",
+      "top": "top",
+      "upper_right": "upper right",
+      "left": "left side",
+      "centre": "centre",
+      "right": "right side",
+      "lower_left": "lower left",
+      "bottom": "bottom",
+      "lower_right": "lower right"
+    },
+    "templates": {
+      "unsure_headline": "I am not sure about this photo.",
+      "top_guesses": "The model's two closest guesses were {a} ({pa}%) and {b} ({pb}%).",
+      "headline_healthy": "Result: {name}. No signs of the diseases this app knows about were found in this photo.",
+      "headline_suspected": "Suspected: {name}.",
+      "conf_high": "The model is fairly confident ({pct}%).",
+      "conf_medium": "The model is moderately confident ({pct}%), so please double-check.",
+      "second_choice": "It also considered {other} ({pct}%).",
+      "attention_focused": "The model looked mostly at the {where} of the photo (the red and yellow area on the heatmap).",
+      "attention_focused_healthy": "The red and yellow area of the heatmap, mostly in the {where} of the photo, shows what looked normal to the model.",
+      "attention_spread": "The model's attention is spread over much of the photo. A closer photo of the leaf or nut may give a clearer result.",
+      "check_signs_intro": "Check the plant for:",
+      "other_possibilities_intro": "Other possibilities to ask an expert about:",
+      "heatmap_note": "The heatmap shows where the model looked. It does not prove the cause of the problem. Only an expert can confirm a disease."
+    }
+  },
+  "i18n_status": {
+    "en": "draft",
+    "kn": "PLACEHOLDER",
+    "hi": "PLACEHOLDER",
+    "ml": "PLACEHOLDER"
+  }
+}
