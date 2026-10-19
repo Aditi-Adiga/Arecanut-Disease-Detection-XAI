@@ -65,7 +65,7 @@ Open http://127.0.0.1:5173. Vite proxies `/api` to the backend. Rebuild the fron
 npm.cmd --prefix frontend test
 ```
 
-Backend checks cover uploads, size limits, real-model response structure, raw pixel preprocessing, equality with the Colab resize expression, confidence boundaries, original Keras vs feature pipeline, and exported CAM weights. Frontend tests cover file validation, uncertain results and bounded local history. Synthetic images verify wiring only; they do not measure agricultural accuracy.
+Backend checks cover uploads, size limits, real-model response structure, raw pixel preprocessing, equality with the Colab resize expression, confidence boundaries, original Keras vs feature pipeline, exported CAM weights, and language-independent predictions. Frontend tests cover onboarding, language selection, file validation, score formatting, uncertain results, heatmap controls and bounded local history. Synthetic images verify wiring only; they do not measure agricultural accuracy.
 
 ### Real-photo parity check
 
@@ -86,19 +86,19 @@ Investigate any difference before describing Colab/app parity as verified.
 ## API
 
 - `GET /api/health`: model availability.
-- `GET /api/diseases`: supplied reference information.
-- `POST /api/predict`: multipart `file`; returns probabilities, result status, CAM overlay, resized input and deterministic explanation.
+- `GET /api/diseases?language=en`: reference information in `en`, `kn`, `hi` or `ml`.
+- `POST /api/predict?language=en`: multipart `file`; returns probabilities, result status, CAM overlay, resized input and deterministic explanation. Language changes text only.
 - `/docs`: interactive FastAPI API documentation.
 
 JPEG/PNG/WebP, maximum 10 MB and 24 MP. Images are decoded as RGB with TensorFlow and resized to 224×224 with `tf.image.resize(..., method="bilinear")`, raw float32 values in 0–255. The backbone contains normalization. The image is stretched like the training pipeline, not cropped. EXIF auto-rotation is deliberately not applied to avoid silently changing the supplied Colab loader.
 
 CAM = ReLU(features @ effective weights), max-normalized, bicubic-resized and clipped. The weights incorporate BatchNorm scaling before the Dense layer. A CAM highlights evidence contributing to a class logit and does not prove the disease or localize a confirmed lesion.
 
-Class order: Healthy_Leaf, Healthy_Nut, Mahali_Koleroga, Yellow_Leaf. Healthy result cutoff 0.95; suspected disease cutoff 0.70. Below those values the result is unsure. These are supplied validation thresholds, not guarantees or calibrated disease probabilities.
+Class order: Healthy_Leaf, Healthy_Nut, Mahali_Koleroga, Yellow_Leaf. Healthy result cutoff 0.95; suspected disease cutoff 0.70. Below those values the result is unsure. These are supplied validation thresholds, not guarantees or calibrated disease probabilities. Scores above 99.9% display as `>99.9%`; positive scores below 0.1% display as `<0.1%`. Raw API values and thresholds remain unchanged.
 
 ## Data, history and limitations
 
-- English only. Kannada, Hindi and Malayalam require translations and review; no language selector pretends otherwise.
+- Welcome page → language selection → photo screening. English, Kannada, Hindi and Malayalam are available across navigation, results, explanations and the guide. Regional translations are drafts pending native-speaker and agricultural review. Regional guides condense source guidance into basic care advice; they are not complete word-for-word translations of historical treatment instructions.
 - History stores up to eight resized scans in localStorage on this browser/device; raw uploads are not saved to the backend filesystem. Deployment operators must separately control proxy/server logs and storage policies.
 - The disease guide is the supplied draft. Expert review of treatment guidance, especially historical doses and schedules, remains outstanding. The unverified Bordeaux recipe and items explicitly marked `verify` are not displayed.
 - The model has no unrelated-object/OOD class. It can confidently classify unsupported inputs. Use actual arecanut leaves/nuts and get expert confirmation.

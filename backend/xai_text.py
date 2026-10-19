@@ -1,5 +1,6 @@
 """The deterministic explanation rules from the supplied Colab script."""
 import numpy as np
+from .formatting import percentage_label
 
 POS_KEY = {
     ("upper", "left"): "upper_left", ("upper", "centre"): "top", ("upper", "right"): "upper_right",
@@ -36,17 +37,17 @@ def explain(probs, heat, info, class_names):
     cutoff = th["healthy_below"] if healthy else th["unsure_below"]
     if conf < cutoff:
         lines = [templates["unsure_headline"], templates["top_guesses"].format(
-            a=ci.get("short_name", ci["display_name"]), pa=round(conf * 100),
-            b=c2i.get("short_name", c2i["display_name"]), pb=round(conf2 * 100))]
+            a=ci.get("short_name", ci["display_name"]), pa=percentage_label(conf),
+            b=c2i.get("short_name", c2i["display_name"]), pb=percentage_label(conf2))]
         lines += [item["text"] for item in info["uncertain_result"]["what_to_do"]]
         lines.append(templates["heatmap_note"])
         status = "unsure"
     else:
         status = "healthy" if healthy else "suspected"
         lines = [templates["headline_healthy" if healthy else "headline_suspected"].format(name=ci["display_name"]),
-                 templates["conf_high" if conf >= th["high_at"] else "conf_medium"].format(pct=round(conf * 100))]
+                 templates["conf_high" if conf >= th["high_at"] else "conf_medium"].format(pct=percentage_label(conf))]
         if conf2 >= th["second_choice_at"]:
-            lines.append(templates["second_choice"].format(other=c2i.get("short_name", c2i["display_name"]), pct=round(conf2 * 100)))
+            lines.append(templates["second_choice"].format(other=c2i.get("short_name", c2i["display_name"]), pct=percentage_label(conf2)))
         if where is None or where == "several_areas" or conc < th["spread_below"]:
             lines.append(templates["attention_spread"])
         else:

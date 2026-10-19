@@ -32,3 +32,21 @@ def test_predict_response_contract(client):
 def test_large_upload_rejected(client):
     response = client.post("/api/predict", files={"file": ("large.jpg", b"x" * (10 * 1024 * 1024 + 1), "image/jpeg")})
     assert response.status_code == 413
+
+
+def test_language_changes_text_without_changing_prediction(client):
+    image = BytesIO()
+    Image.new("RGB", (224, 224), (45, 150, 65)).save(image, format="PNG")
+    payload = {"file": ("synthetic.png", image.getvalue(), "image/png")}
+    english = client.post("/api/predict?language=en", files=payload).json()
+    kannada_response = client.post("/api/predict?language=kn", files=payload)
+    assert kannada_response.status_code == 200
+    kannada = kannada_response.json()
+    assert kannada["language"] == "kn"
+    assert kannada["display_name"] != english["display_name"]
+    assert kannada["explanation"]["lines"] != english["explanation"]["lines"]
+    assert kannada["confidence"] == english["confidence"]
+    assert kannada["status"] == english["status"]
+    assert kannada["heatmap_image"] == english["heatmap_image"]
+    assert [p["probability"] for p in kannada["probabilities"]] == [p["probability"] for p in english["probabilities"]]
+    assert client.get("/api/diseases?language=unsupported").status_code == 422

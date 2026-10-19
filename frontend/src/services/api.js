@@ -6,8 +6,8 @@ export async function getJson(path, options = {}) {
   return body;
 }
 
-export function analyseImage(file, signal) {
+export function analyseImage(file, signal, language = 'en') {
   const data = new FormData();
   data.append('file', file);
-  return getJson('/api/predict', { method: 'POST', body: data, signal });
+  return getJson('/api/predict' + (language === 'en' ? '' : '?language=' + language), { method: 'POST', body: data, signal });
 }

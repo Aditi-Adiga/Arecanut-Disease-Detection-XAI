@@ -19,21 +19,37 @@ afterEach(() => vi.unstubAllGlobals());
 test('upload, analyse, see explanation and reopen saved result', async () => {
   vi.stubGlobal('fetch', vi.fn(async (path) => ({ ok: true, json: async () => path === '/api/health' ? { model_loaded: true } : path === '/api/predict' ? result : null })));
   render(<App/>);
-  await screen.findByText('Local model ready');
+  fireEvent.click(screen.getByRole('button',{name:'Get started'}));
+  fireEvent.click(screen.getByRole('button',{name:'Continue'}));
+  await screen.findByText('Model ready');
   fireEvent.change(screen.getByLabelText('Choose plant image'), { target: { files: [new File(['image'], 'plant.png', { type: 'image/png' })] } });
   fireEvent.click(screen.getByRole('button', { name: /analyse plant health/i }));
   expect(await screen.findByText('Disease pattern suspected')).toBeInTheDocument();
   expect(screen.getByText('The heatmap does not prove the cause.')).toBeInTheDocument();
   fireEvent.click(screen.getByRole('button', { name: /scan history/i }));
   expect(screen.getByText('plant.png')).toBeInTheDocument();
-  fireEvent.click(screen.getByRole('button', { name: /suspected pattern/i }));
+  fireEvent.click(screen.getByRole('button', { name: /plant.png/i }));
   expect(await screen.findByText('Viewing a saved result. Choose a new photo to run another analysis.')).toBeInTheDocument();
 });
 
 test('an unreachable API offers recovery and prevents a scan', async () => {
   vi.stubGlobal('fetch', vi.fn(async () => { throw new Error('Failed to fetch'); }));
   render(<App/>);
+  fireEvent.click(screen.getByRole('button',{name:'Get started'}));
+  fireEvent.click(screen.getByRole('button',{name:'Continue'}));
   await waitFor(() => expect(screen.getByText('Model unavailable')).toBeInTheDocument());
-  expect(screen.getByRole('button', { name: /retry server connection/i })).toBeInTheDocument();
+  expect(screen.getByRole('button', { name: /retry connection/i })).toBeInTheDocument();
   expect(screen.getByRole('button', { name: /analyse plant health/i })).toBeDisabled();
+});
+
+test('welcome leads to language selection and Kannada controls',async()=>{
+  vi.stubGlobal('fetch',vi.fn(async(path)=>({ok:true,json:async()=>path==='/api/health'?{model_loaded:true}:null})));
+  render(<App/>);
+  expect(screen.queryByLabelText('Choose plant image')).not.toBeInTheDocument();
+  fireEvent.click(screen.getByRole('button',{name:'Get started'}));
+  fireEvent.click(screen.getByRole('radio',{name:/ಕನ್ನಡ/}));
+  fireEvent.click(screen.getByRole('button',{name:'ಮುಂದುವರಿಸಿ'}));
+  expect(await screen.findByRole('heading',{name:'ಗಿಡದ ಫೋಟೋ ಸೇರಿಸಿ'})).toBeInTheDocument();
+  expect(document.documentElement.lang).toBe('kn');
+  expect(localStorage.getItem('arecalens-language')).toBe('kn');
 });

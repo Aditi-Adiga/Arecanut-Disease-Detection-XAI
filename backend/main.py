@@ -1,4 +1,5 @@
 import logging
+from typing import Literal
 from contextlib import asynccontextmanager
 from pathlib import Path
 
@@ -39,8 +40,8 @@ def health():
 
 
 @app.get("/api/diseases")
-def diseases():
-    return load_disease_info()
+def diseases(language: Literal["en", "kn", "hi", "ml"] = "en"):
+    return load_disease_info(language)
 
 
 @app.get("/api/ready")
@@ -51,7 +52,7 @@ def ready():
 
 
 @app.post("/api/predict")
-async def predict(file: UploadFile = File(...)):
+async def predict(file: UploadFile = File(...), language: Literal["en", "kn", "hi", "ml"] = "en"):
     try:
         content = await file.read(MAX_BYTES + 1)
     finally:
@@ -64,7 +65,7 @@ async def predict(file: UploadFile = File(...)):
     if predictor is None:
         raise HTTPException(status_code=503, detail="The model is not ready. Check the server console.")
     try:
-        return await run_in_threadpool(predictor.predict, content)
+        return await run_in_threadpool(predictor.predict, content, language)
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
     except Exception as exc:

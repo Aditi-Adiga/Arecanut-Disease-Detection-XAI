@@ -586,10 +586,10 @@
     "templates": {
       "unsure_headline": "I am not sure about this photo.",
       "top_guesses": "The model's two closest guesses were {a} ({pa}%) and {b} ({pb}%).",
-      "headline_healthy": "Result: {name}. No signs of the diseases this app knows about were found in this photo.",
+      "headline_healthy": "Healthy appearance suggested: {name}. A photo cannot rule out disease.",
       "headline_suspected": "Suspected: {name}.",
-      "conf_high": "The model is fairly confident ({pct}%).",
-      "conf_medium": "The model is moderately confident ({pct}%), so please double-check.",
+      "conf_high": "The model strongly favours this class (relative score: {pct}%). This does not confirm a diagnosis.",
+      "conf_medium": "The model favours this class (relative score: {pct}%). Please double-check the plant.",
       "second_choice": "It also considered {other} ({pct}%).",
       "attention_focused": "The model looked mostly at the {where} of the photo (the red and yellow area on the heatmap).",
       "attention_focused_healthy": "The red and yellow area of the heatmap, mostly in the {where} of the photo, shows what looked normal to the model.",
