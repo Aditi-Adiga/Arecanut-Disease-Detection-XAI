@@ -139,3 +139,55 @@ def test_chat_logging_does_not_log_message_text(client, caplog):
 
     for record in caplog.records:
         assert secret_text not in record.getMessage()
+
+
+def test_chat_chips_with_ids_filter(client):
+    res = client.get("/api/chat/chips?language=kn&ids=yld_cause,leaf_spot,unknown_id")
+    assert res.status_code == 200
+    chips = res.json()["chips"]
+    assert len(chips) == 2
+    assert chips[0]["id"] == "yld_cause"
+    assert "ಹಳದಿ" in chips[0]["question"]
+    assert chips[1]["id"] == "leaf_spot"
+    assert "ಎಲೆ" in chips[1]["question"]
+
+
+def test_chat_entry_id_lookup_translated(client):
+    res = client.post("/api/chat", json={
+        "message": "What is leaf spot?",
+        "language": "kn",
+        "entry_id": "leaf_spot"
+    })
+    assert res.status_code == 200
+    data = res.json()
+    assert data["intent"] == "faq"
+    assert data["entry_id"] == "leaf_spot"
+    assert data["language_fallback"] is False
+    assert "ಎಲೆ ಚುಕ್ಕೆ" in data["answer"]
+
+
+def test_chat_entry_id_lookup_fallback(client):
+    res = client.post("/api/chat", json={
+        "message": "The spindle leaf is turning yellow",
+        "language": "kn",
+        "entry_id": "bud_crown_rot"
+    })
+    assert res.status_code == 200
+    data = res.json()
+    assert data["intent"] == "faq"
+    assert data["entry_id"] == "bud_crown_rot"
+    assert data["language_fallback"] is True
+    assert "spindle" in data["answer"].lower()
+
+
+def test_chat_multilingual_advice_kannada(client):
+    res = client.post("/api/chat", json={
+        "message": "ಈಗ ನಾನು ಏನು ಮಾಡಬೇಕು?",
+        "language": "kn",
+        "context": {"class": "Mahali_Koleroga", "status": "suspected"}
+    })
+    assert res.status_code == 200
+    data = res.json()
+    assert data["intent"] == "current_result_advice"
+    assert data["language_fallback"] is True
+

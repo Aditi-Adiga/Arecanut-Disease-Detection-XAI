@@ -224,3 +224,31 @@
 ### 6. Item 6 Housekeeping
 - **Task & Documentation Tracking:** Ensured [PROGRESS.md](file:///d:/dev/arecanut_web/PROGRESS.md), [ANTIGRAVITY_TASK.md](file:///d:/dev/arecanut_web/ANTIGRAVITY_TASK.md), [CONTINUE_TASK.md](file:///d:/dev/arecanut_web/CONTINUE_TASK.md), and all contents in [docs/](file:///d:/dev/arecanut_web/docs) are tracked under git version control.
 - **Remote Inspection:** Verified `git remote -v` (tracked under origin).
+
+## Multilingual Ask Tab Bug Fix (Completed)
+
+### 1. Root Cause Analysis
+- **Missing FAQ Translations:** 16 FAQ entries in [chatbot_faq.json](file:///d:/dev/arecanut_web/backend/data/chatbot_faq.json) had empty `questions_i18n` and null `i18n` answers for `kn`, `hi`, and `ml`. When chips like `leaf_spot` or `yld_cause` were suggested, they fell back to English text.
+- **Missing Direct `entry_id` Lookup:** Frontend chip clicks sent the question string through NLP retrieval rather than looking up the deterministic entry by ID.
+- **Stale Suggestion Chips on Language Switch:** Follow-up chips attached to previous assistant bubbles remained in their initial language when the user changed the UI language selector.
+- **Unlocalized Context Question:** Clicking "About your last result" hardcoded "What should I do now?" in English, bypassing language context.
+- **Fallback Flag Behavior:** `_reply()` in [chat_engine.py](file:///d:/dev/arecanut_web/backend/chat_engine.py) did not set `language_fallback: true` on replies without an entry or `i18n_map`.
+
+### 2. Implementation
+- **Backend ([chat_api.py](file:///d:/dev/arecanut_web/backend/chat_api.py), [chat_engine.py](file:///d:/dev/arecanut_web/backend/chat_engine.py), [chatbot_faq.json](file:///d:/dev/arecanut_web/backend/data/chatbot_faq.json)):**
+  - Added `entry_id` field to `ChatRequest` with validation against known entry IDs.
+  - Added `answer_by_id()` method to `ChatEngine` to return entries directly without NLP scoring degradation.
+  - Added `ids` parameter to `GET /api/chat/chips` for batch retrieval of localized chip labels.
+  - Provided draft translations for FAQ entries across Kannada, Hindi, and Malayalam, maintaining `bud_crown_rot` as un-translated fallback benchmark.
+  - Enhanced `_ADVICE` regex to recognize localized advice requests in Kannada, Hindi, and Malayalam.
+  - Corrected `language_fallback: true` assignment in `_reply()`.
+- **Frontend ([AskTab.jsx](file:///d:/dev/arecanut_web/frontend/src/components/AskTab.jsx), [messages.js](file:///d:/dev/arecanut_web/frontend/src/locales/messages.js)):**
+  - Updated starter chips and follow-up chips to pass `entry_id` and show translated questions in the user bubble.
+  - Implemented dynamic suggestion chip reloading on language switch using `GET /api/chat/chips?language=${language}&ids=${ids}`.
+  - Added `lastResultQuestion` to `messages.js` for `en`, `kn`, `hi`, and `ml`.
+- **Testing & Quality Assurance:**
+  - Fixed `test_chat_unseen.py` blob join type error.
+  - Added 4 new API tests in [test_chat_api.py](file:///d:/dev/arecanut_web/backend/tests/test_chat_api.py).
+  - Added unit and integration tests in [AskTab.test.jsx](file:///d:/dev/arecanut_web/frontend/src/components/__tests__/AskTab.test.jsx).
+  - Verified 68 pytest passed (100%), 27 vitest passed (100%), and Vite production build passed.
+

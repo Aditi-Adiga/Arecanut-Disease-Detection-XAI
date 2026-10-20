@@ -16,6 +16,9 @@ logger = logging.getLogger(__name__)
 ClassName = Literal["Healthy_Leaf", "Healthy_Nut", "Mahali_Koleroga", "Yellow_Leaf"]
 LanguageCode = Literal["en", "kn", "hi", "ml"]
 
+# Valid FAQ entry IDs (loaded at startup; used to validate the entry_id direct-lookup field)
+_VALID_ENTRY_IDS: set[str] = set()
+
 DATA_DIR = Path(__file__).resolve().parent / "data"
 FAQ_PATH = DATA_DIR / "chatbot_faq.json"
 DISEASE_INFO_PATH = DATA_DIR / "disease_info.json"
@@ -54,6 +57,7 @@ def load_chat_data() -> tuple[dict, dict, ChatEngine]:
 
 
 faq_data, disease_info_data, chat_engine = load_chat_data()
+_VALID_ENTRY_IDS.update(e["id"] for e in faq_data.get("entries", []))
 
 
 class InMemoryRateLimiter:
@@ -91,6 +95,9 @@ class ChatRequest(BaseModel):
     message: str
     language: LanguageCode = "en"
     context: Optional[ChatContext] = None
+    # Optional: when set, skip NLP inference and return the entry directly.
+    # Sent by the frontend when the user clicks a chip whose entry_id is known.
+    entry_id: Optional[str] = None
 
     @field_validator("message")
     @classmethod
@@ -99,6 +106,15 @@ class ChatRequest(BaseModel):
         if not (1 <= len(stripped) <= 300):
             raise ValueError("Message must be 1 to 300 characters after stripping.")
         return stripped
+
+    @field_validator("entry_id")
+    @classmethod
+    def validate_entry_id(cls, v: Optional[str]) -> Optional[str]:
+        if v is None:
+            return None
+        if v not in _VALID_ENTRY_IDS:
+            raise ValueError(f"Unknown entry_id: '{v}'")
+        return v
 
 
 class SourceItem(BaseModel):
@@ -131,8 +147,21 @@ router = APIRouter(prefix="/api/chat", tags=["chat"])
 
 
 @router.get("/chips")
-def get_chips(language: LanguageCode = "en"):
-    chips = chat_engine._chips(language)
+def get_chips(language: LanguageCode = "en", ids: Optional[str] = None):
+    """Return starter chip labels in *language*.
+
+    When *ids* is provided (comma-separated entry IDs) only those entries are
+    returned, in the order given.  Unknown IDs are silently skipped.
+    This is used by the frontend to refresh stale follow-up chip labels when the
+    UI language changes.
+    """
+    if ids:
+        id_list = [i.strip() for i in ids.split(",") if i.strip()]
+        # Filter to known entries only
+        id_list = [i for i in id_list if i in _VALID_ENTRY_IDS]
+        chips = chat_engine._chips(language, id_list)
+    else:
+        chips = chat_engine._chips(language)
     return {"chips": chips}
 
 
@@ -158,7 +187,17 @@ def post_chat(payload: ChatRequest, request: Request):
         if payload.context.confidence is not None:
             engine_context["confidence"] = payload.context.confidence
 
-    reply = chat_engine.answer(payload.message, language=payload.language, context=engine_context)
+    # Direct entry lookup: chip clicks send entry_id so we skip NLP scoring.
+    # Safety checks still apply via the engine's answer() path when the question
+    # text would trigger them, but for direct lookups we just return the entry.
+    if payload.entry_id:
+        reply = chat_engine.answer_by_id(
+            payload.entry_id,
+            language=payload.language,
+            context=engine_context,
+        )
+    else:
+        reply = chat_engine.answer(payload.message, language=payload.language, context=engine_context)
 
     expanded_sources: list[SourceItem] = []
     faq_sources = faq_data.get("sources", {})

@@ -37,7 +37,7 @@ export default function AskTab({ result, info }) {
   const [openSources, setOpenSources] = useState({});
   const messagesEndRef = useRef(null);
 
-  // Load starter question chips whenever language changes
+  // Load starter question chips and refresh suggestions whenever language changes
   useEffect(() => {
     let active = true;
     getJson(`/api/chat/chips?language=${language}`)
@@ -49,6 +49,34 @@ export default function AskTab({ result, info }) {
       .catch(() => {
         if (active) setChips([]);
       });
+
+    // Also reload suggestion chips in existing messages when language changes
+    setMessages(prev => {
+      const lastAssIdx = prev.map(m => m.role).lastIndexOf('assistant');
+      if (lastAssIdx === -1 || !prev[lastAssIdx]?.suggestions?.length) {
+        return prev;
+      }
+      const suggestionIds = prev[lastAssIdx].suggestions.map(s => s.id).filter(Boolean);
+      if (suggestionIds.length === 0) return prev;
+
+      getJson(`/api/chat/chips?language=${language}&ids=${suggestionIds.join(',')}`)
+        .then(res => {
+          if (!active || !res || !Array.isArray(res.chips)) return;
+          setMessages(current => {
+            const idx = current.map(m => m.role).lastIndexOf('assistant');
+            if (idx === -1 || !current[idx]?.suggestions?.length) return current;
+            const updated = [...current];
+            updated[idx] = {
+              ...updated[idx],
+              suggestions: res.chips,
+            };
+            return updated;
+          });
+        })
+        .catch(() => {});
+      return prev;
+    });
+
     return () => {
       active = false;
     };
@@ -64,7 +92,7 @@ export default function AskTab({ result, info }) {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, busy, error]);
 
-  async function sendMessage(textToSend, contextOverride = null) {
+  async function sendMessage(textToSend, contextOverride = null, entryId = null) {
     const trimmed = (textToSend || '').trim();
     if (!trimmed || busy) return;
 
@@ -89,9 +117,10 @@ export default function AskTab({ result, info }) {
       message: trimmed,
       language,
       ...(chatContext ? { context: chatContext } : {}),
+      ...(entryId ? { entry_id: entryId } : {}),
     };
 
-    setLastQuery({ text: trimmed, context: chatContext });
+    setLastQuery({ text: trimmed, context: chatContext, entryId });
 
     try {
       const data = await getJson('/api/chat', {
@@ -125,7 +154,7 @@ export default function AskTab({ result, info }) {
 
   function handleRetry() {
     if (lastQuery) {
-      sendMessage(lastQuery.text, lastQuery.context);
+      sendMessage(lastQuery.text, lastQuery.context, lastQuery.entryId);
     }
   }
 
@@ -175,7 +204,7 @@ export default function AskTab({ result, info }) {
           <button
             type="button"
             className="ask-last-result-chip"
-            onClick={() => sendMessage('What should I do now?', {
+            onClick={() => sendMessage(t('lastResultQuestion'), {
               class: result.class_id,
               status: result.status,
               confidence: result.confidence,
@@ -196,7 +225,7 @@ export default function AskTab({ result, info }) {
                 key={chip.id}
                 type="button"
                 className="ask-chip-button"
-                onClick={() => sendMessage(chip.question)}
+                onClick={() => sendMessage(chip.question, null, chip.id)}
                 disabled={busy}
               >
                 {chip.question}
@@ -274,7 +303,7 @@ export default function AskTab({ result, info }) {
                         key={s.id}
                         type="button"
                         className="ask-chip-button suggestion"
-                        onClick={() => sendMessage(s.question)}
+                        onClick={() => sendMessage(s.question, null, s.id)}
                         disabled={busy}
                       >
                         {s.question}

@@ -30,9 +30,9 @@ def test_unseen_questions_evaluation():
 
     # Allowed verified texts
     all_answers = [e["answer"] for e in faq["entries"]]
-    all_answers.extend(faq["safety"].values())
+    all_answers.extend([v for v in faq["safety"].values() if isinstance(v, str)])
     if "fallback" in faq and isinstance(faq["fallback"], dict):
-        all_answers.extend(faq["fallback"].values())
+        all_answers.extend([v for v in faq["fallback"].values() if isinstance(v, str)])
     all_answers.append("I can only answer questions about arecanut leaf and nut health from this app's verified guide. Please choose one of the questions below, or ask an agricultural officer or KVK.")
     all_answers_blob = " ".join(all_answers)
 

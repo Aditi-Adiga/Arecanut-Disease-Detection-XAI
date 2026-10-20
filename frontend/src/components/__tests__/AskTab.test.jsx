@@ -375,4 +375,54 @@ describe('AskTab Component', () => {
     expect(document.querySelector('.ask-empty-state')).toBeNull();
     expect(document.querySelector('.fallback-chips')).toBeNull();
   });
+
+  test('starter chip and follow-up chip clicks send entry_id and display user message', async () => {
+    let capturedBody = null;
+    vi.stubGlobal('fetch', vi.fn(async (path, opts) => {
+      if (typeof path === 'string' && path.includes('/api/chat/chips')) {
+        return { ok: true, json: async () => ({ chips: mockChips }) };
+      }
+      if (opts && opts.body) {
+        capturedBody = JSON.parse(opts.body);
+      }
+      return {
+        ok: true,
+        json: async () => ({
+          answer: 'Mahali is fruit rot of areca nut.',
+          intent: 'faq',
+          entry_id: 'what_is_koleroga',
+          sources: [],
+          refused: false,
+          needs_expert_review: false,
+          language_fallback: false,
+          suggestions: [{ id: 'leaf_spot', question: 'What is leaf spot?' }],
+        }),
+      };
+    }));
+
+    renderAskTab();
+    const chip = await screen.findByRole('button', { name: 'What is Mahali?' });
+    fireEvent.click(chip);
+
+    await waitFor(() => {
+      expect(screen.getByText('What is Mahali?')).toBeInTheDocument();
+      expect(capturedBody).toEqual(expect.objectContaining({
+        message: 'What is Mahali?',
+        entry_id: 'what_is_koleroga',
+        language: 'en',
+      }));
+    });
+
+    const followUp = await screen.findByRole('button', { name: 'What is leaf spot?' });
+    fireEvent.click(followUp);
+
+    await waitFor(() => {
+      expect(screen.getAllByText('What is leaf spot?').length).toBeGreaterThanOrEqual(1);
+      expect(capturedBody).toEqual(expect.objectContaining({
+        message: 'What is leaf spot?',
+        entry_id: 'leaf_spot',
+        language: 'en',
+      }));
+    });
+  });
 });

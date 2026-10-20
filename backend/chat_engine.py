@@ -44,7 +44,13 @@ _HEALTH = re.compile(r"\b(fever|cough|headache|pregnan\w*|snake|poison\w*|swallo
 _OUT = re.compile(r"\b(price|rate today|market|weather|forecast|will it rain|rain tomorrow|subsidy|loan|insurance|coconut|paddy|rice|banana|"
                   r"pepper|cocoa|rubber|tomato|cow|goat)\b", re.I)
 _CONFIRM = re.compile(r"\b(confirm\w*|diagnos\w*|100 ?%|for sure|certain)\b", re.I)
-_ADVICE = re.compile(r"\b(what (should|do|can|shall) i do|what now|next step|what to do|advice|how (do|can|to) (i )?(treat|fix|save))\b", re.I)
+_ADVICE = re.compile(
+    r"\b(what (should|do|can|shall) i do|what now|next step|what to do|advice|how (do|can|to) (i )?(treat|fix|save))\b|"
+    r"(ಈಗ ನಾನು ಏನು ಮಾಡಬೇಕು|ಮುಂದಿನ ಕ್ರಮ|ಮುಂದೆ ಏನು ಮಾಡಬೇಕು|ಸಲಹೆ)|"
+    r"(अब मुझे क्या करना चाहिए|अगला कदम|क्या करूँ|सलाह)|"
+    r"(ഇനി ഞാൻ എന്താണ് ചെയ്യേണ്ടത്|അടുത്ത നടപടി|എന്ത് ചെയ്യണം|ഉപദേശം)",
+    re.I | re.UNICODE,
+)
 
 
 def _stem(t):
@@ -113,6 +119,8 @@ class ChatEngine:
                     answer = translated
                 else:
                     fallback_lang = True
+            else:
+                fallback_lang = True
         return {"answer": answer, "intent": intent, "entry_id": entry["id"] if entry else None,
                 "sources": list(sources), "score": round(score, 3), "refused": refused,
                 "needs_expert_review": bool(entry and entry.get("needs_expert_review")),
@@ -132,6 +140,26 @@ class ChatEngine:
         if ci.get("limits"):
             parts.append(ci["limits"]["text"])
         return self._reply("\n\n".join(parts), "current_result_advice", sources=sorted(src), lang=lang)
+
+    def answer_by_id(self, entry_id, language="en", context=None):
+        """Direct entry lookup: used when user clicks a known chip.
+        
+        Returns the entry in the requested language (or English fallback with
+        language_fallback=True if translation is missing).
+        """
+        if entry_id not in self.entries:
+            return self.answer("", language=language, context=context)
+        e = self.entries[entry_id]
+        same = [x for x, ee in self.entries.items() if ee["topic"] == e["topic"] and x != e["id"]][:3]
+        return self._reply(
+            e["answer"],
+            "faq",
+            entry=e,
+            sources=e["sources"],
+            score=1.0,
+            lang=language,
+            suggestions=self._chips(language, same) if same else None,
+        )
 
     # ---- main entry ----------------------------------------------------------------------
     def answer(self, message, language="en", context=None):
