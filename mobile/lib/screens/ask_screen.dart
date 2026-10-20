@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../chat/chat_engine.dart';
 import '../core/constants.dart';
 import '../core/theme.dart';
 import '../models/chat_message.dart';
@@ -24,12 +25,43 @@ class _AskScreenState extends State<AskScreen> {
   List<SuggestionItem> _starterChips = [];
   bool _isLoading = false;
   bool _isOnlineAvailable = false;
+  ChatEngine? _offlineEngine;
+  Map<String, SourceItem> _sourceMetadata = {};
 
   @override
   void initState() {
     super.initState();
     _loadChips();
     _checkOnlineStatus();
+    _initOfflineEngine();
+  }
+
+  Future<void> _initOfflineEngine() async {
+    try {
+      final faqStr = await rootBundle.loadString('assets/data/chatbot_faq.json');
+      final infoStr = await rootBundle.loadString('assets/data/disease_info.json');
+      final faq = json.decode(faqStr) as Map<String, dynamic>;
+      final info = json.decode(infoStr) as Map<String, dynamic>;
+      final rawSources = faq['sources'] as Map<String, dynamic>? ?? {};
+      final meta = <String, SourceItem>{};
+      rawSources.forEach((k, v) {
+        if (v is Map<String, dynamic>) {
+          meta[k] = SourceItem(
+            id: k,
+            title: v['title'] as String? ?? '',
+            publisher: v['publisher'] as String? ?? '',
+            year: v['year']?.toString() ?? '',
+            url: v['url'] as String? ?? '',
+          );
+        }
+      });
+      if (mounted) {
+        setState(() {
+          _sourceMetadata = meta;
+          _offlineEngine = ChatEngine(faq, info: info);
+        });
+      }
+    } catch (_) {}
   }
 
   @override
@@ -128,23 +160,61 @@ class _AskScreenState extends State<AskScreen> {
     }
 
     try {
-      final reply = await api.sendChatMessage(
-        message: cleanText,
-        language: locale.currentLanguage,
-        context: ctx,
-        entryId: entryId,
-        history: chatHistory.messages,
-        isOnline: isOnlineMode,
-      );
+      if (isOnlineMode) {
+        // Online LLM proxy flow
+        final reply = await api.sendChatMessage(
+          message: cleanText,
+          language: locale.currentLanguage,
+          context: ctx,
+          entryId: entryId,
+          history: chatHistory.messages,
+          isOnline: true,
+        );
+        await chatHistory.addMessage(reply);
+      } else if (_offlineEngine != null) {
+        // Pure on-device offline engine flow
+        final reply = entryId != null
+            ? _offlineEngine!.answerById(entryId, language: locale.currentLanguage, context: ctx)
+            : _offlineEngine!.answer(cleanText, language: locale.currentLanguage, context: ctx);
 
-      await chatHistory.addMessage(reply);
+        final expandedSources = reply.sources
+            .map((sid) => _sourceMetadata[sid] ?? SourceItem(id: sid, title: sid, publisher: '', year: '', url: ''))
+            .toList();
+        final suggestions = reply.suggestions
+            .map((s) => SuggestionItem(id: s['id'] ?? '', question: s['question'] ?? ''))
+            .toList();
+
+        final botMsg = ChatMessage(
+          id: (DateTime.now().millisecondsSinceEpoch + 1).toString(),
+          role: 'assistant',
+          text: reply.answer,
+          sources: expandedSources,
+          needsExpertReview: reply.needsExpertReview,
+          languageFallback: reply.languageFallback,
+          aiGenerated: false,
+          answerSource: 'guide',
+          suggestions: suggestions,
+          entryId: reply.entryId,
+        );
+        await chatHistory.addMessage(botMsg);
+      } else {
+        // Fallback to server API if offline engine not loaded
+        final reply = await api.sendChatMessage(
+          message: cleanText,
+          language: locale.currentLanguage,
+          context: ctx,
+          entryId: entryId,
+          history: chatHistory.messages,
+          isOnline: false,
+        );
+        await chatHistory.addMessage(reply);
+      }
       _scrollToBottom();
     } catch (e) {
-      // Local fallback answer if network fails
       final errorMsg = ChatMessage(
         id: (DateTime.now().millisecondsSinceEpoch + 1).toString(),
         role: 'assistant',
-        text: 'Could not connect to the assistant server. Please verify your connection or server URL in Settings.',
+        text: 'Could not connect to online assistant. Showing verified guide results.',
         answerSource: 'guide',
       );
       await chatHistory.addMessage(errorMsg);
