@@ -16,6 +16,11 @@ class AppConstants {
   static const int maxChatMessages = 30;
   static const int maxImageBytes = 10 * 1024 * 1024; // 10 MB
 
+  // Feature flags
+  // Set to false: offline photo screening requires on-device TFLite parity verification
+  // with at least 20 farm validation images. Unverified offline screening is disabled for farmer safety.
+  static const bool enableOfflineScreening = false;
+
   // Supported UI languages
   static const List<String> supportedLanguages = ['en', 'kn', 'hi', 'ml'];
 

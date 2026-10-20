@@ -2,7 +2,8 @@ import logging
 import pytest
 
 
-def test_chat_status(client):
+def test_chat_status(client, monkeypatch):
+    monkeypatch.setenv("ENABLE_LLM_CHAT", "0")
     res = client.get("/api/chat/status")
     assert res.status_code == 200
     assert res.json() == {"online_enabled": False}
