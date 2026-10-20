@@ -133,4 +133,38 @@
   - **Safe Outcome Rate:** **20/20 (100.0%)** (all 5 non-exact matches mapped to closely related FAQ entries like `koleroga_sanitation` or safe fallback/referrals).
   - **Invented Doses:** **0** (strictly zero chemical doses outside verified files).
 - **Pytest result:** 58 passed, 1 warning in 2.14s.
+## Phase 4: README, Docs, Evaluation Write-up (Completed)
+
+### 1. Updated Documentation
+- **[README.md](file:///D:/dev/arecanut_web/README.md):**
+  - Updated API endpoints to include `GET /api/chat/chips`, `GET /api/chat/status`, and `POST /api/chat`.
+  - Documented exact `POST /api/chat` request and response JSON schemas.
+  - Documented safety constraints (never mentions unverified spray doses, never claims disease confirmation, zero photo acceptance, zero server message logging, 30 req/min/IP rate limit).
+  - Clarified optional online "Ask More" mode status (Phase 6).
+  - Documented step-by-step FAQ extension guide with validation rules.
+- **[DEMO_CHECKLIST.md](file:///D:/dev/arecanut_web/DEMO_CHECKLIST.md):**
+  - Added steps to demonstrate the "Ask" tab, starter chips, scan context chip, expert-review badges, source links, graceful refusal of out-of-scope questions, and safe refusal of chemical dose requests.
+  - Recorded exact automated test results (58 pytest, 25 vitest, 100% dev accuracy, 75% unseen accuracy, 100% safe outcome rate).
+
+## Phase 5: UI Polish (Partial / Safe)
+
+### 1. Item 1 Evaluation & Uncommitted Changes Resolution
+- **External Resources Check:** Inspected `frontend/index.html`. Rejected external Google Fonts URL preconnect/stylesheet links per rule prohibiting external asset dependencies; restored `frontend/index.html` to clean baseline.
+- **Safe CSS Retained:** In `frontend/src/styles.css`:
+  - Retained WCAG AA text contrast boosts on muted elements, footers, disclaimers, and guides (`#5c6b5a` and `#6a7568`).
+  - Retained navbar active pill contrast gradient.
+  - Retained assistant message entrance slide-up animation (`slideUpFade`).
+  - Retained bot message bubble gradient and soft shadow.
+  - Retained user message bubble gradient and border.
+  - Retained chip hover elevation micro-interaction.
+  - Retained 3-dot typing pulse animation (`ask-dot-pulse`).
+  - Retained dropzone hover styling.
+  - Retained all `@media (prefers-reduced-motion: reduce)` guards.
+- **Constraints Verified:**
+  - Zero external URLs or fonts loaded.
+  - No controls hidden.
+  - No text made smaller than 16px.
+  - No touch targets reduced below 44px (min-height/min-width intact).
+  - No container margins breaking layout at 360px mobile width.
+- **Verification:** All 25 vitest tests pass; production build succeeds cleanly.
 
