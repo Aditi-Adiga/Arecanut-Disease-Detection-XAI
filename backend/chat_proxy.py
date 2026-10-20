@@ -20,6 +20,12 @@ import urllib.error
 import urllib.request
 from typing import Any, Optional
 
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
+
 from .chat_engine import (
     _CHEM,
     _CONFIRM,

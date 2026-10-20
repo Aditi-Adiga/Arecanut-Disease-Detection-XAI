@@ -10,6 +10,12 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.concurrency import run_in_threadpool
 
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
+
 from .inference import Predictor, load_disease_info
 from .preprocessing import MAX_BYTES
 from .chat_api import router as chat_router
