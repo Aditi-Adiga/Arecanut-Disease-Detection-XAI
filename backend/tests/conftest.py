@@ -13,3 +13,11 @@ def client():
 def predictor(client):
     assert app.state.predictor is not None, app.state.model_error
     return app.state.predictor
+
+
+@pytest.fixture(autouse=True)
+def reset_rate_limiter():
+    from backend.chat_api import rate_limiter
+    with rate_limiter.lock:
+        rate_limiter.requests.clear()
+

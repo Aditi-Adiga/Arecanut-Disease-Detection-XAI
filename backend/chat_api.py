@@ -10,6 +10,7 @@ from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from .chat_engine import ChatEngine
+from .chat_proxy import answer_online, is_online_enabled
 
 logger = logging.getLogger(__name__)
 
@@ -91,6 +92,11 @@ class ChatContext(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
 
+class ChatTurn(BaseModel):
+    role: Literal["user", "assistant"]
+    content: str
+
+
 class ChatRequest(BaseModel):
     message: str
     language: LanguageCode = "en"
@@ -98,6 +104,8 @@ class ChatRequest(BaseModel):
     # Optional: when set, skip NLP inference and return the entry directly.
     # Sent by the frontend when the user clicks a chip whose entry_id is known.
     entry_id: Optional[str] = None
+    # Optional: up to 6 recent conversation turns for context in online mode
+    history: Optional[list[ChatTurn]] = None
 
     @field_validator("message")
     @classmethod
@@ -141,64 +149,10 @@ class ChatResponse(BaseModel):
     suggestions: list[SuggestionItem]
     ai_generated: bool = False
     answer_source: str = "guide"
+    online_error: Optional[str] = None
 
 
-router = APIRouter(prefix="/api/chat", tags=["chat"])
-
-
-@router.get("/chips")
-def get_chips(language: LanguageCode = "en", ids: Optional[str] = None):
-    """Return starter chip labels in *language*.
-
-    When *ids* is provided (comma-separated entry IDs) only those entries are
-    returned, in the order given.  Unknown IDs are silently skipped.
-    This is used by the frontend to refresh stale follow-up chip labels when the
-    UI language changes.
-    """
-    if ids:
-        id_list = [i.strip() for i in ids.split(",") if i.strip()]
-        # Filter to known entries only
-        id_list = [i for i in id_list if i in _VALID_ENTRY_IDS]
-        chips = chat_engine._chips(language, id_list)
-    else:
-        chips = chat_engine._chips(language)
-    return {"chips": chips}
-
-
-@router.get("/status")
-def get_chat_status():
-    return {"online_enabled": False}
-
-
-@router.post("", response_model=ChatResponse)
-def post_chat(payload: ChatRequest, request: Request):
-    client_ip = request.client.host if request.client else "unknown"
-    if not rate_limiter.is_allowed(client_ip):
-        # Log rate-limit hit without logging any message text
-        logger.warning("Chat rate limit exceeded for client %s", client_ip)
-        raise HTTPException(status_code=429, detail="Too many chat requests. Please wait a moment.")
-
-    engine_context = {}
-    if payload.context:
-        if payload.context.cls is not None:
-            engine_context["class"] = payload.context.cls
-        if payload.context.status is not None:
-            engine_context["status"] = payload.context.status
-        if payload.context.confidence is not None:
-            engine_context["confidence"] = payload.context.confidence
-
-    # Direct entry lookup: chip clicks send entry_id so we skip NLP scoring.
-    # Safety checks still apply via the engine's answer() path when the question
-    # text would trigger them, but for direct lookups we just return the entry.
-    if payload.entry_id:
-        reply = chat_engine.answer_by_id(
-            payload.entry_id,
-            language=payload.language,
-            context=engine_context,
-        )
-    else:
-        reply = chat_engine.answer(payload.message, language=payload.language, context=engine_context)
-
+def format_chat_response(reply: dict) -> ChatResponse:
     expanded_sources: list[SourceItem] = []
     faq_sources = faq_data.get("sources", {})
     for sid in reply.get("sources", []):
@@ -228,6 +182,99 @@ def post_chat(payload: ChatRequest, request: Request):
         needs_expert_review=reply.get("needs_expert_review", False),
         language_fallback=reply.get("language_fallback", False),
         suggestions=suggestions,
-        ai_generated=False,
-        answer_source="guide",
+        ai_generated=reply.get("ai_generated", False),
+        answer_source=reply.get("answer_source", "guide"),
+        online_error=reply.get("online_error"),
     )
+
+
+router = APIRouter(prefix="/api/chat", tags=["chat"])
+
+
+@router.get("/chips")
+def get_chips(language: LanguageCode = "en", ids: Optional[str] = None):
+    """Return starter chip labels in *language*.
+
+    When *ids* is provided (comma-separated entry IDs) only those entries are
+    returned, in the order given.  Unknown IDs are silently skipped.
+    This is used by the frontend to refresh stale follow-up chip labels when the
+    UI language changes.
+    """
+    if ids:
+        id_list = [i.strip() for i in ids.split(",") if i.strip()]
+        # Filter to known entries only
+        id_list = [i for i in id_list if i in _VALID_ENTRY_IDS]
+        chips = chat_engine._chips(language, id_list)
+    else:
+        chips = chat_engine._chips(language)
+    return {"chips": chips}
+
+
+@router.get("/status")
+def get_chat_status():
+    return {"online_enabled": is_online_enabled()}
+
+
+@router.post("", response_model=ChatResponse)
+def post_chat(payload: ChatRequest, request: Request):
+    client_ip = request.client.host if request.client else "unknown"
+    if not rate_limiter.is_allowed(client_ip):
+        # Log rate-limit hit without logging any message text
+        logger.warning("Chat rate limit exceeded for client %s", client_ip)
+        raise HTTPException(status_code=429, detail="Too many chat requests. Please wait a moment.")
+
+    engine_context = {}
+    if payload.context:
+        if payload.context.cls is not None:
+            engine_context["class"] = payload.context.cls
+        if payload.context.status is not None:
+            engine_context["status"] = payload.context.status
+        if payload.context.confidence is not None:
+            engine_context["confidence"] = payload.context.confidence
+
+    # Direct entry lookup: chip clicks send entry_id so we skip NLP scoring.
+    if payload.entry_id:
+        reply = chat_engine.answer_by_id(
+            payload.entry_id,
+            language=payload.language,
+            context=engine_context,
+        )
+    else:
+        reply = chat_engine.answer(payload.message, language=payload.language, context=engine_context)
+
+    return format_chat_response(reply)
+
+
+@router.post("/online", response_model=ChatResponse)
+@router.post("/ask-more", response_model=ChatResponse)
+def post_chat_online(payload: ChatRequest, request: Request):
+    client_ip = request.client.host if request.client else "unknown"
+    if not rate_limiter.is_allowed(client_ip):
+        logger.warning("Chat rate limit exceeded for client %s", client_ip)
+        raise HTTPException(status_code=429, detail="Too many chat requests. Please wait a moment.")
+
+    engine_context = {}
+    if payload.context:
+        if payload.context.cls is not None:
+            engine_context["class"] = payload.context.cls
+        if payload.context.status is not None:
+            engine_context["status"] = payload.context.status
+        if payload.context.confidence is not None:
+            engine_context["confidence"] = payload.context.confidence
+
+    history_list = None
+    if payload.history:
+        history_list = [{"role": t.role, "content": t.content} for t in payload.history]
+
+    reply = answer_online(
+        chat_engine=chat_engine,
+        disease_info=disease_info_data,
+        faq_sources=faq_data.get("sources", {}),
+        message=payload.message,
+        language=payload.language,
+        context=engine_context,
+        history=history_list,
+    )
+
+    return format_chat_response(reply)
+

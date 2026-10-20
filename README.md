@@ -88,18 +88,21 @@ Investigate any difference before describing Colab/app parity as verified.
 - `GET /api/diseases?language=en` – reference information in `en`, `kn`, `hi` or `ml`.
 - `POST /api/predict?language=en` – multipart `file`; returns probabilities, result status, CAM overlay, resized input and deterministic explanation.
 - `GET /api/chat/chips?language=en` – starter question chips for the Ask tab.
-- `GET /api/chat/status` – returns `{"online_enabled": false}` (online mode is Phase 6).
+- `GET /api/chat/status` – returns `{"online_enabled": bool}`. Note: a `true` status indicates that `ENABLE_LLM_CHAT` is active and all required server variables (`CHATBOT_API_KEY`, `CHATBOT_API_URL`, `CHATBOT_MODEL`) are set; it does not prove the external provider will accept the call.
 - `POST /api/chat` – offline knowledge-grounded chat.
+- `POST /api/chat/online` (and alias `POST /api/chat/ask-more`) – online LLM chat proxy grounded in retrieved FAQ and disease guide context with server-side safety post-checks.
 - `/docs` – interactive FastAPI API documentation.
 
-### `POST /api/chat` schema
+### `POST /api/chat` and `POST /api/chat/online` schema
 
 **Request:**
 ```json
 {
   "message": "What is Koleroga?",
   "language": "en",
-  "context": { "cls": "Mahali_Koleroga" }
+  "context": { "cls": "Mahali_Koleroga" },
+  "entry_id": "optional_entry_id",
+  "history": [{"role": "user", "content": "..."}, {"role": "assistant", "content": "..."}]
 }
 ```
 
@@ -108,6 +111,8 @@ Investigate any difference before describing Colab/app parity as verified.
 | `message` | string | 1–300 chars (stripped), required |
 | `language` | enum | `en`, `kn`, `hi`, `ml` (default `en`) |
 | `context.cls` | enum or null | `Healthy_Leaf`, `Healthy_Nut`, `Mahali_Koleroga`, `Yellow_Leaf` |
+| `entry_id` | string or null | Optional FAQ entry ID for direct deterministic lookup |
+| `history` | list or null | Optional recent turns (up to 6) sent by client for online context |
 
 **Response:**
 ```json
@@ -117,23 +122,36 @@ Investigate any difference before describing Colab/app parity as verified.
   "answer": "Mahali (also called Koleroga) is a fruit rot...",
   "language_fallback": false,
   "needs_expert_review": false,
-  "sources": [{ "id": "S1", "label": "...", "url": "..." }],
-  "follow_up_chips": ["How to prevent Koleroga?", "..."],
-  "refused": false
+  "sources": [{ "id": "S1", "title": "...", "publisher": "...", "year": "1989", "url": "..." }],
+  "suggestions": [{"id": "koleroga_prevent", "question": "How to prevent Koleroga?"}],
+  "refused": false,
+  "ai_generated": false,
+  "answer_source": "guide",
+  "online_error": null
 }
 ```
 
 **Safety constraints (always enforced, never bypassed):**
-- Never mentions spray doses, mixing amounts, or chemical quantities.
+- Never mentions spray doses, mixing amounts, or chemical quantities beyond verified reference texts.
 - Never says a disease is "confirmed" — only "suspected" or "consistent with".
 - Never accepts or returns photos.
-- Never logs message text on the server.
+- Never logs message text or provider response bodies on the server.
 - Rate-limited to 30 requests/minute/IP; returns `429` when exceeded.
 - `refused: true` on dose, chemical brand, health emergency, and disease-confirmation questions.
 
-### Optional online "Ask More" mode (Phase 6)
+### Online "Ask More" mode (Phase 6 / Session B)
 
-Online mode is not yet enabled. When implemented, it will proxy through a backend endpoint with strict post-checks (dose hallucination regex, 15 s timeout) before returning any LLM response. The LLM will never see photos. Configure `ENABLE_LLM_CHAT=1` and `CHATBOT_API_KEY` as server-only environment variables — never in frontend files or source control.
+Online mode proxies questions to an OpenAI-compatible endpoint (such as Gemini's OpenAI-compatible completions endpoint):
+1. **Server-Side Safety Pre-Checks:** If any safety filter fires (health, dose, chemical, confirm, out-of-scope), the offline guide answer is returned immediately without contacting the LLM provider.
+2. **Context Retrieval:** `ChatEngine.top_k(message, k=3)` retrieves the top 3 relevant FAQ entries plus current scan result advice from `disease_info.json`.
+3. **Strict System Prompt:** Instructs the assistant to answer ONLY from the provided CONTEXT in the selected language, keep answers under 120 words, and never give doses or certainty claims.
+4. **Safety Post-Checks:** Server scans the model output. If the response contains certainty words ("confirmed", "definitely", "100%") or any measurement number followed by units (`ml`, `g`, `kg`, `litre`, `ppm`, `%`) not grounded in the retrieved context, the reply is discarded and the verified offline guide answer is returned instead.
+5. **Configuration (Server Environment Only):**
+   - `ENABLE_LLM_CHAT=1` (or `true`)
+   - `CHATBOT_API_KEY` (kept strictly server-side; never committed to git or exposed to the frontend)
+   - `CHATBOT_API_URL` (OpenAI-compatible URL, e.g. `https://generativelanguage.googleapis.com/v1beta/openai/chat/completions`)
+   - `CHATBOT_MODEL` (e.g. `gemini-1.5-flash`)
+6. **Graceful Fallback:** On any failure (timeout of 15 s, rate limit, provider error, 401/403/404, network error, or ungrounded dose post-check rejection), the API returns HTTP 200 with the verified offline answer, `ai_generated: false`, `answer_source: "guide"`, and an informative `online_error` code.
 
 ### Extending the FAQ
 

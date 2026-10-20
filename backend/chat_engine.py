@@ -161,6 +161,43 @@ class ChatEngine:
             suggestions=self._chips(language, same) if same else None,
         )
 
+    def top_k(self, message, k=3, context=None):
+        """Retrieve top k FAQ entries matching message, reusing engine scoring.
+        
+        Returns a list of up to k FAQ entry dicts.
+        """
+        msg = (message or "").strip()
+        ctx = context or {}
+        qtok = tokens(msg)
+        known = [t for t in set(qtok) if t in self.idf]
+        if not known:
+            return [self.entries[cid] for cid in self.faq.get("chips", [])[:k] if cid in self.entries]
+
+        total = sum(self.idf[t] for t in known)
+        scored = []
+        for eid, e in self.entries.items():
+            if e.get("require") and not all(t in set(qtok) for t in tokens(" ".join(e["require"]))):
+                continue
+            matched = [t for t in known if t in self.kw[eid] or t in self.qt[eid]]
+            if not matched:
+                continue
+            w = sum(self.idf[t] * (1.0 if t in self.kw[eid] else 0.6) for t in matched)
+            score = (w / total) * min(1.0, 0.5 + 0.25 * len(matched))
+            if ctx.get("class") in e.get("classes", []):
+                score *= 1.15
+            scored.append((score, e))
+
+        scored.sort(key=lambda x: x[0], reverse=True)
+        top = [e for _, e in scored[:k]]
+        if len(top) < k:
+            for cid in self.faq.get("chips", []):
+                if len(top) >= k:
+                    break
+                ce = self.entries.get(cid)
+                if ce and ce not in top:
+                    top.append(ce)
+        return top[:k]
+
     # ---- main entry ----------------------------------------------------------------------
     def answer(self, message, language="en", context=None):
         msg = (message or "").strip()

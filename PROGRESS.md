@@ -252,3 +252,44 @@
   - Added unit and integration tests in [AskTab.test.jsx](file:///d:/dev/arecanut_web/frontend/src/components/__tests__/AskTab.test.jsx).
   - Verified 68 pytest passed (100%), 27 vitest passed (100%), and Vite production build passed.
 
+## Session B / Phase 6: Online "Ask more" Proxy with Safety Post-Checks (Completed)
+
+### 1. Backend LLM Proxy Implementation
+- Created [backend/chat_proxy.py](file:///d:/dev/arecanut_web/backend/chat_proxy.py):
+  - Server-only environment variables: `ENABLE_LLM_CHAT` (disabled by default), `CHATBOT_API_KEY`, `CHATBOT_API_URL`, `CHATBOT_MODEL`. Keys are read dynamically at request time and never committed, stored, or logged.
+  - Strict safety pre-checks: Checks query with `_HEALTH`, `_DOSE`, `_CHEM`, `_OUT`, `_CONFIRM`, and Bordeaux preparation regex. If any fire, returns the verified offline answer immediately without contacting the LLM provider.
+  - Grounding Context Retrieval: Added `ChatEngine.top_k(message, k=3, context=context)` in [backend/chat_engine.py](file:///d:/dev/arecanut_web/backend/chat_engine.py) to retrieve the top 3 relevant FAQ entries and current class advice from [disease_info.json](file:///d:/dev/arecanut_web/backend/data/disease_info.json).
+  - System Prompt: Enforces strict groundedness from context only, under 120 words, in the requested language, with zero chemical doses or confirmation claims.
+  - Provider Integration: OpenAI-compatible completions format with 15-second timeout and temperature 0.1.
+  - Strict Post-Checks: Scans the model reply. Rejects and discards the reply if it contains certainty words ("confirmed", "definitely", "100%") or any numeric measurements (`ml`, `g`, `kg`, `litre`, `ppm`, `%`) not present in the retrieved context.
+  - Graceful Fallback: On any provider error (`not_configured`, `timeout`, `auth`, `model_not_found`, `rate_limited`, `provider_error`, `network`), returns HTTP 200 with the verified offline answer and an `online_error` code.
+- Registered endpoints in [backend/chat_api.py](file:///d:/dev/arecanut_web/backend/chat_api.py):
+  - `POST /api/chat/online` and alias `POST /api/chat/ask-more`.
+  - Updated `GET /api/chat/status` to return `{"online_enabled": bool}`.
+
+### 2. Frontend "Ask more (online)" UI Integration
+- Updated [frontend/src/components/AskTab.jsx](file:///d:/dev/arecanut_web/frontend/src/components/AskTab.jsx):
+  - Added "Ask more (online)" button below assistant responses with status detection.
+  - When offline or not configured by server, the button is greyed out with an explanatory reason.
+  - Privacy Notice Modal: Displays on first use before sending, detailing what is sent (question, class of last result, up to 3 guide entries) and what is not (photos, scan history). Remembers acknowledgment for the session in `sessionStorage`.
+  - Badges & Notices: Displays "AI-generated, may be wrong. Confirm with your agricultural officer or KVK." badge on online replies, and informative fallback notices when provider errors occur.
+  - Added 15-second client-side AbortController timeout.
+- Added localized messages for online chat across English, Kannada, Hindi, and Malayalam in [frontend/src/locales/extraMessages.js](file:///d:/dev/arecanut_web/frontend/src/locales/extraMessages.js).
+- Added styling in [frontend/src/styles.css](file:///d:/dev/arecanut_web/frontend/src/styles.css) for the AI-generated badge, error notices, button states, and privacy modal.
+
+### 3. Verification & Quality Assurance
+- **Backend Tests ([test_chat_proxy.py](file:///d:/dev/arecanut_web/backend/tests/test_chat_proxy.py)):**
+  - Added 15 comprehensive tests covering successful online generation, safety filter provider blocking, post-check rejection of hallucinated doses and certainty words, provider error fallbacks (401, 403, 404, 429, 500, timeout, network error), and disabled flag fallback.
+  - All **83 pytest** tests in `backend/tests/` passed (100%).
+- **Frontend Tests ([AskTab.test.jsx](file:///d:/dev/arecanut_web/frontend/src/components/__tests__/AskTab.test.jsx)):**
+  - Added tests for button disabled states, privacy notice modal dialog flow, session acknowledgment persistence, AI-generated badge display, and online error notices.
+  - All **30 vitest** tests in 8 test files passed (100%).
+- **Build Verification:**
+  - `npm run build` cleanly succeeded in 2.81s.
+- **Secrets & Parity Scan:**
+  - Automated scanner confirmed 0 secrets or API keys in the codebase.
+- **Live Server Test:**
+  - Verified `GET /api/chat/status` -> `{"online_enabled": false}`.
+  - Verified `POST /api/chat/online` and `POST /api/chat/ask-more` cleanly fall back to verified guide answer with `online_error='not_configured'` when server credentials are not set.
+
+

@@ -29,6 +29,12 @@ describe('AskTab Component', () => {
           json: async () => ({ chips: mockChips }),
         };
       }
+      if (typeof path === 'string' && path.includes('/api/chat/status')) {
+        return {
+          ok: true,
+          json: async () => ({ online_enabled: false }),
+        };
+      }
       return {
         ok: true,
         json: async () => ({
@@ -165,6 +171,9 @@ describe('AskTab Component', () => {
     vi.stubGlobal('fetch', vi.fn(async (path) => {
       if (typeof path === 'string' && path.includes('/api/chat/chips')) {
         return { ok: true, json: async () => ({ chips: mockChips }) };
+      }
+      if (typeof path === 'string' && path.includes('/api/chat/status')) {
+        return { ok: true, json: async () => ({ online_enabled: false }) };
       }
       callCount++;
       if (callCount === 1) {
@@ -425,4 +434,145 @@ describe('AskTab Component', () => {
       }));
     });
   });
+
+  test('ask more online button is disabled when online_enabled is false', async () => {
+    renderAskTab();
+    const chip = await screen.findByRole('button', { name: 'What is Mahali?' });
+    fireEvent.click(chip);
+
+    const askMoreBtn = await screen.findByRole('button', { name: /ask more \(online\)/i });
+    expect(askMoreBtn).toBeDisabled();
+    expect(askMoreBtn).toHaveClass('disabled');
+  });
+
+  test('ask more online button triggers privacy modal and remembers acknowledgment', async () => {
+    let capturedOnlineBody = null;
+    vi.stubGlobal('fetch', vi.fn(async (path, opts) => {
+      if (typeof path === 'string' && path.includes('/api/chat/chips')) {
+        return { ok: true, json: async () => ({ chips: mockChips }) };
+      }
+      if (typeof path === 'string' && path.includes('/api/chat/status')) {
+        return { ok: true, json: async () => ({ online_enabled: true }) };
+      }
+      if (typeof path === 'string' && path.includes('/api/chat/online')) {
+        if (opts && opts.body) capturedOnlineBody = JSON.parse(opts.body);
+        return {
+          ok: true,
+          json: async () => ({
+            answer: 'This is an AI-generated explanation grounded in CPCRI guide.',
+            intent: 'online_llm',
+            sources: [],
+            refused: false,
+            needs_expert_review: false,
+            language_fallback: false,
+            suggestions: [],
+            ai_generated: true,
+            answer_source: 'ai',
+          }),
+        };
+      }
+      return {
+        ok: true,
+        json: async () => ({
+          answer: 'Mahali is fruit rot of areca nut.',
+          intent: 'faq',
+          entry_id: 'what_is_koleroga',
+          sources: [],
+          refused: false,
+          needs_expert_review: false,
+          language_fallback: false,
+          suggestions: [],
+          ai_generated: false,
+          answer_source: 'guide',
+        }),
+      };
+    }));
+
+    renderAskTab();
+    const chip = await screen.findByRole('button', { name: 'What is Mahali?' });
+    fireEvent.click(chip);
+
+    const askMoreBtn = await screen.findByRole('button', { name: /ask more \(online\)/i });
+    expect(askMoreBtn).not.toBeDisabled();
+    fireEvent.click(askMoreBtn);
+
+    // Privacy notice modal should pop up
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    expect(screen.getByText(/what is sent:/i)).toBeInTheDocument();
+    expect(screen.getByText(/what is not sent:/i)).toBeInTheDocument();
+
+    // Click acknowledge button
+    const ackBtn = screen.getByRole('button', { name: /i understand/i });
+    fireEvent.click(ackBtn);
+
+    // Modal closes and online answer appears
+    await waitFor(() => {
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+      expect(screen.getByText(/this is an ai-generated explanation/i)).toBeInTheDocument();
+      expect(screen.getByText(/ai-generated, may be wrong/i)).toBeInTheDocument();
+    });
+
+    expect(sessionStorage.getItem('arecalens_online_ack_v1')).toBe('true');
+    expect(capturedOnlineBody).toEqual(expect.objectContaining({
+      message: 'What is Mahali?',
+      language: 'en',
+    }));
+    expect(Array.isArray(capturedOnlineBody.history)).toBe(true);
+  });
+
+  test('displays online error notice when online_error is returned', async () => {
+    vi.stubGlobal('fetch', vi.fn(async (path) => {
+      if (typeof path === 'string' && path.includes('/api/chat/chips')) {
+        return { ok: true, json: async () => ({ chips: mockChips }) };
+      }
+      if (typeof path === 'string' && path.includes('/api/chat/status')) {
+        return { ok: true, json: async () => ({ online_enabled: true }) };
+      }
+      if (typeof path === 'string' && path.includes('/api/chat/online')) {
+        return {
+          ok: true,
+          json: async () => ({
+            answer: 'Verified offline fallback answer.',
+            intent: 'faq',
+            sources: [],
+            refused: false,
+            needs_expert_review: false,
+            language_fallback: false,
+            suggestions: [],
+            ai_generated: false,
+            answer_source: 'guide',
+            online_error: 'rate_limited',
+          }),
+        };
+      }
+      return {
+        ok: true,
+        json: async () => ({
+          answer: 'Mahali is fruit rot of areca nut.',
+          intent: 'faq',
+          sources: [],
+          refused: false,
+          needs_expert_review: false,
+          language_fallback: false,
+          suggestions: [],
+          ai_generated: false,
+          answer_source: 'guide',
+        }),
+      };
+    }));
+
+    sessionStorage.setItem('arecalens_online_ack_v1', 'true');
+    renderAskTab();
+    const chip = await screen.findByRole('button', { name: 'What is Mahali?' });
+    fireEvent.click(chip);
+
+    const askMoreBtn = await screen.findByRole('button', { name: /ask more \(online\)/i });
+    fireEvent.click(askMoreBtn);
+
+    await waitFor(() => {
+      expect(screen.getByText(/too many requests to the ai provider/i)).toBeInTheDocument();
+      expect(screen.getByText('Verified offline fallback answer.')).toBeInTheDocument();
+    });
+  });
 });
+
