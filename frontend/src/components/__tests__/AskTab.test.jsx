@@ -278,4 +278,101 @@ describe('AskTab Component', () => {
       expect(body.image).toBeUndefined();
     });
   });
+
+  test('after fallback reply chips appear exactly once, and normal FAQ answer has <= 3 follow-ups and no second starter row', async () => {
+    const full7Chips = [
+      { id: 'what_is_koleroga', question: 'What is Mahali?' },
+      { id: 'koleroga_prevent', question: 'How do I prevent Koleroga?' },
+      { id: 'what_is_yld', question: 'What is Yellow Leaf Disease?' },
+      { id: 'yld_treatment', question: 'How to treat yellow leaf disease?' },
+      { id: 'photo_tips', question: 'How do I take a good photo?' },
+      { id: 'why_unsure', question: 'Why does it say not sure?' },
+      { id: 'when_expert', question: 'When should I call an expert?' },
+    ];
+
+    vi.stubGlobal('fetch', vi.fn(async (path, opts) => {
+      if (typeof path === 'string' && path.includes('/api/chat/chips')) {
+        return {
+          ok: true,
+          json: async () => ({ chips: full7Chips }),
+        };
+      }
+      const body = opts && opts.body ? JSON.parse(opts.body) : {};
+      if (body.message === 'fallback query') {
+        return {
+          ok: true,
+          json: async () => ({
+            answer: "I can only answer questions about arecanut leaf and nut health from this app's verified guide.",
+            intent: 'fallback',
+            entry_id: 'fallback',
+            sources: [],
+            refused: false,
+            needs_expert_review: false,
+            language_fallback: false,
+            suggestions: full7Chips,
+            ai_generated: false,
+            answer_source: 'guide',
+          }),
+        };
+      }
+      return {
+        ok: true,
+        json: async () => ({
+          answer: 'Mahali is fruit rot caused by Phytophthora meadii.',
+          intent: 'faq',
+          entry_id: 'what_is_koleroga',
+          sources: [{ id: 'S1', title: 'Extension Folder No. 17', publisher: 'CPCRI', year: '1989', url: 'https://example.com/s1' }],
+          refused: false,
+          needs_expert_review: false,
+          language_fallback: false,
+          suggestions: [
+            { id: 'f1', question: 'How to prevent Koleroga?' },
+            { id: 'f2', question: 'Can Bordeaux mixture help?' },
+          ],
+          ai_generated: false,
+          answer_source: 'guide',
+        }),
+      };
+    }));
+
+    renderAskTab();
+    expect(await screen.findByRole('button', { name: 'What is Mahali?' })).toBeInTheDocument();
+
+    const input = screen.getByPlaceholderText(/Type your question/i);
+    const sendButton = screen.getByRole('button', { name: /Send/i });
+
+    // 1. Send fallback query
+    fireEvent.change(input, { target: { value: 'fallback query' } });
+    fireEvent.click(sendButton);
+
+    await waitFor(() => {
+      expect(screen.getByText(/I can only answer questions/i)).toBeInTheDocument();
+    });
+
+    // Check that "What is Mahali?" and "When should I call an expert?" each appear exactly once
+    const mahaliButtons = screen.getAllByRole('button', { name: 'What is Mahali?' });
+    expect(mahaliButtons).toHaveLength(1);
+
+    const expertButtons = screen.getAllByRole('button', { name: 'When should I call an expert?' });
+    expect(expertButtons).toHaveLength(1);
+
+    // 2. Send normal FAQ query
+    fireEvent.change(input, { target: { value: 'What is Mahali?' } });
+    fireEvent.click(sendButton);
+
+    await waitFor(() => {
+      expect(screen.getByText(/caused by Phytophthora meadii/i)).toBeInTheDocument();
+    });
+
+    // After normal FAQ answer:
+    // Only the latest bot message has suggestion chips (at most 3 follow-ups)
+    const suggestionsGroup = document.querySelectorAll('.ask-suggestions-group');
+    expect(suggestionsGroup).toHaveLength(1);
+    const followUpButtons = suggestionsGroup[0].querySelectorAll('.ask-chip-button.suggestion');
+    expect(followUpButtons.length).toBeLessThanOrEqual(3);
+
+    // And no second starter row appears
+    expect(document.querySelector('.ask-empty-state')).toBeNull();
+    expect(document.querySelector('.fallback-chips')).toBeNull();
+  });
 });

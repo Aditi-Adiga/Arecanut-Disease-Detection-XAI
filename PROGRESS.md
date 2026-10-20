@@ -168,3 +168,15 @@
   - No container margins breaking layout at 360px mobile width.
 - **Verification:** All 25 vitest tests pass; production build succeeds cleanly.
 
+### 2. Item 2 Duplicate Chips Resolution
+- **Render Sites Identified:**
+  1. Panel-level starter chips in [AskTab.jsx](file:///d:/dev/arecanut_web/frontend/src/components/AskTab.jsx) (`messages.length === 0 && chips.length > 0`) rendered only on empty chat.
+  2. In-message suggestion chips rendered in bot bubbles. Previously, fallback replies also rendered a redundant `fallback-chips` block below `msg.suggestions`.
+- **Fix:**
+  - Removed duplicate `fallback-chips` block.
+  - Constrained in-message suggestions rendering strictly to the latest bot message (`index === lastAssistantIndex`).
+  - Preserved backend response shape unchanged.
+- **Test Added:** Added Vitest integration test in `AskTab.test.jsx`:
+  - Verified after a fallback reply that "What is Mahali?" and "When should I call an expert?" each appear exactly once.
+  - Verified after a normal FAQ answer that at most 3 follow-up chips appear and no second starter row appears.
+- **Verification:** 26 vitest tests passing across 8 files; production build clean.

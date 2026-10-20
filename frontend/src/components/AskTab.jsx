@@ -147,6 +147,8 @@ export default function AskTab({ result, info }) {
     ? (info?.classes?.[result.class_id]?.short_name || result.display_name || result.class_id)
     : '';
 
+  const lastAssistantIndex = messages.map(m => m.role).lastIndexOf('assistant');
+
   return (
     <div className="ask-tab-container card">
       <div className="ask-tab-header">
@@ -265,7 +267,7 @@ export default function AskTab({ result, info }) {
                   </div>
                 )}
 
-                {msg.suggestions && msg.suggestions.length > 0 && (
+                {index === lastAssistantIndex && msg.suggestions && msg.suggestions.length > 0 && (
                   <div className="ask-suggestions-group" role="group" aria-label={t('starterQuestions')}>
                     {msg.suggestions.map(s => (
                       <button
@@ -276,22 +278,6 @@ export default function AskTab({ result, info }) {
                         disabled={busy}
                       >
                         {s.question}
-                      </button>
-                    ))}
-                  </div>
-                )}
-
-                {(msg.language_fallback || msg.intent === 'fallback') && chips.length > 0 && (
-                  <div className="ask-suggestions-group fallback-chips" role="group" aria-label={t('starterQuestions')}>
-                    {chips.map(chip => (
-                      <button
-                        key={chip.id}
-                        type="button"
-                        className="ask-chip-button suggestion"
-                        onClick={() => sendMessage(chip.question)}
-                        disabled={busy}
-                      >
-                        {chip.question}
                       </button>
                     ))}
                   </div>
