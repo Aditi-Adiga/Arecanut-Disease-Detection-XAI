@@ -4,6 +4,7 @@ dist/
 
 # Python
 .venv/
+backend/.venv/
 __pycache__/
 *.pyc
 
@@ -11,11 +12,19 @@ __pycache__/
 .env
 .env.*
 
+# Logs
+*.log
+
+# Flutter
+mobile/build/
+.dart_tool/
+
 # Trained AI models (stored separately)
 *.keras
 *.h5
 *.tflite
 !backend/models/mobilenetv3small.keras
+!backend/models/v3small_probs_features.tflite
 
 # OS files
 .DS_Store

@@ -1,0 +1,1069 @@
+{
+  "version": "0.1-draft",
+  "review_status": "DRAFT. Answers are copied from disease_info.json v0.3 and the verified sources. An agricultural expert must review them, and native speakers must translate them, before release.",
+  "chips": [
+    "what_is_koleroga",
+    "koleroga_prevent",
+    "what_is_yld",
+    "yld_treatment",
+    "photo_tips",
+    "why_unsure",
+    "when_expert"
+  ],
+  "fallback": {
+    "text": "I can only answer questions about arecanut leaf and nut health from this app's verified guide. Please choose one of the questions below, or ask an agricultural officer or KVK."
+  },
+  "safety": {
+    "dose": "I can't give spray doses or mixing amounts, because a wrong amount can harm you, your palms or the environment. Please ask an agricultural officer or KVK, and always follow the product label.",
+    "chemical": "I can only share what the sources say about arecanut: 1% Bordeaux mixture is listed for fruit rot and leaf spot. For any other chemical, please ask an agricultural officer or KVK which product is approved and how to use it safely.",
+    "health": "I can't help with health problems. If someone feels unwell, especially after contact with a spray, please get medical help right away.",
+    "out_of_scope": "I can only help with arecanut leaf and nut health checks, not prices, weather, loans or other crops.",
+    "confirm": "I can't confirm a disease. Only an expert who sees the palm can do that."
+  },
+  "entries": [
+    {
+      "require": [],
+      "id": "what_is_koleroga",
+      "topic": "koleroga",
+      "questions": [
+        "What is Mahali?",
+        "What is Koleroga?",
+        "What is fruit rot of arecanut?",
+        "Tell me about Mahali Koleroga"
+      ],
+      "keywords": [
+        "mahali",
+        "koleroga",
+        "fruit rot",
+        "nut rot",
+        "about",
+        "disease"
+      ],
+      "answer": "Mahali (also called Koleroga) is a fruit rot of areca nut. It spreads in wet monsoon weather. Nuts get water-soaked patches, turn dark, rot and fall, and a white mould can grow on fallen nuts. Only an expert can confirm it.",
+      "sources": [
+        "S1",
+        "S2"
+      ],
+      "classes": [
+        "Mahali_Koleroga"
+      ],
+      "needs_expert_review": false,
+      "deployment_dependent": false,
+      "i18n": {
+        "kn": null,
+        "hi": null,
+        "ml": null
+      },
+      "questions_i18n": {
+        "kn": [],
+        "hi": [],
+        "ml": []
+      }
+    },
+    {
+      "require": [],
+      "id": "koleroga_signs",
+      "topic": "koleroga",
+      "questions": [
+        "What are the signs of Koleroga?",
+        "How do I know my nut has Mahali?",
+        "My nuts are rotting and falling",
+        "Nuts turning black after rain"
+      ],
+      "keywords": [
+        "signs",
+        "symptoms",
+        "patch",
+        "water-soaked",
+        "rotting",
+        "falling",
+        "black",
+        "dark",
+        "identify"
+      ],
+      "answer": "Look for a water-soaked, dark green patch on the nut, usually near the top. The patch spreads, the nut rots and falls, often without its small calyx cap, and white mould may grow on fallen nuts. Falling nuts alone are not proof, because other problems can also make nuts fall.",
+      "sources": [
+        "S1",
+        "S2"
+      ],
+      "classes": [
+        "Mahali_Koleroga",
+        "Healthy_Nut"
+      ],
+      "needs_expert_review": false,
+      "deployment_dependent": false,
+      "i18n": {
+        "kn": null,
+        "hi": null,
+        "ml": null
+      },
+      "questions_i18n": {
+        "kn": [],
+        "hi": [],
+        "ml": []
+      }
+    },
+    {
+      "require": [],
+      "id": "koleroga_cause",
+      "topic": "koleroga",
+      "questions": [
+        "What causes Koleroga?",
+        "Why does Mahali happen?",
+        "Why do nuts rot in the monsoon?"
+      ],
+      "keywords": [
+        "cause",
+        "reason",
+        "phytophthora",
+        "monsoon",
+        "humid",
+        "spreads"
+      ],
+      "answer": "It is caused by a Phytophthora organism (Phytophthora meadii). It spreads in cool, humid weather, when heavy rain alternates with short sunny spells during the south-west monsoon.",
+      "sources": [
+        "S1",
+        "S2",
+        "S5"
+      ],
+      "classes": [
+        "Mahali_Koleroga"
+      ],
+      "needs_expert_review": false,
+      "deployment_dependent": false,
+      "i18n": {
+        "kn": null,
+        "hi": null,
+        "ml": null
+      },
+      "questions_i18n": {
+        "kn": [],
+        "hi": [],
+        "ml": []
+      }
+    },
+    {
+      "require": [],
+      "id": "koleroga_prevent",
+      "topic": "koleroga",
+      "questions": [
+        "How to prevent Koleroga?",
+        "How can I protect my nuts from Mahali?",
+        "When should I spray Bordeaux mixture?",
+        "What is the spray schedule for fruit rot?"
+      ],
+      "keywords": [
+        "prevention",
+        "protect",
+        "spray",
+        "schedule",
+        "bordeaux",
+        "timing",
+        "cover",
+        "polythene"
+      ],
+      "answer": "The standard advice is a protective spray of 1% Bordeaux mixture on the bunches before the disease appears: the first spray after the pre-monsoon showers, the second about 40 to 45 days later, and a third if the monsoon is long. Spray finely so the whole bunch is covered. Polythene bunch covers (125 gauge, 75 x 60 cm) also worked well. Please confirm the current schedule with your agricultural officer.",
+      "sources": [
+        "S1",
+        "S2"
+      ],
+      "classes": [
+        "Mahali_Koleroga",
+        "Healthy_Nut"
+      ],
+      "needs_expert_review": true,
+      "deployment_dependent": false,
+      "i18n": {
+        "kn": null,
+        "hi": null,
+        "ml": null
+      },
+      "questions_i18n": {
+        "kn": [],
+        "hi": [],
+        "ml": []
+      }
+    },
+    {
+      "require": [],
+      "id": "koleroga_sanitation",
+      "topic": "koleroga",
+      "questions": [
+        "What should I do with fallen nuts?",
+        "How to stop Mahali from spreading?",
+        "Should I burn rotten nuts?"
+      ],
+      "keywords": [
+        "fallen",
+        "collect",
+        "destroy",
+        "burn",
+        "spread",
+        "sanitation",
+        "clean"
+      ],
+      "answer": "Collect fallen and rotten nuts regularly and destroy them, for example by burning, so the disease does not spread.",
+      "sources": [
+        "S1",
+        "S3"
+      ],
+      "classes": [
+        "Mahali_Koleroga"
+      ],
+      "needs_expert_review": false,
+      "deployment_dependent": false,
+      "i18n": {
+        "kn": null,
+        "hi": null,
+        "ml": null
+      },
+      "questions_i18n": {
+        "kn": [],
+        "hi": [],
+        "ml": []
+      }
+    },
+    {
+      "require": [],
+      "id": "koleroga_late",
+      "topic": "koleroga",
+      "questions": [
+        "I already see rotting nuts, will spraying help?",
+        "Is Bordeaux useful after the infection has started?"
+      ],
+      "keywords": [
+        "already",
+        "started",
+        "late",
+        "infected",
+        "infection"
+      ],
+      "answer": "Spraying after the disease is already spreading often does not control it well, so do not wait. Remove fallen nuts and talk to an agricultural officer quickly if many nuts are falling.",
+      "sources": [
+        "S9"
+      ],
+      "classes": [
+        "Mahali_Koleroga"
+      ],
+      "needs_expert_review": false,
+      "deployment_dependent": false,
+      "i18n": {
+        "kn": null,
+        "hi": null,
+        "ml": null
+      },
+      "questions_i18n": {
+        "kn": [],
+        "hi": [],
+        "ml": []
+      }
+    },
+    {
+      "require": [],
+      "id": "bud_crown_rot",
+      "topic": "koleroga",
+      "questions": [
+        "The spindle leaf is turning yellow",
+        "What is bud rot?",
+        "The crown of my palm is rotting",
+        "The top of my palm is drying"
+      ],
+      "keywords": [
+        "bud",
+        "crown",
+        "spindle",
+        "top",
+        "palm top"
+      ],
+      "answer": "If the new spindle leaf in the crown turns yellow, then brown, or the crown looks rotten, get expert help at once. This can be bud rot or crown rot, caused by the same organism as fruit rot.",
+      "sources": [
+        "S2"
+      ],
+      "classes": [],
+      "needs_expert_review": false,
+      "deployment_dependent": false,
+      "i18n": {
+        "kn": null,
+        "hi": null,
+        "ml": null
+      },
+      "questions_i18n": {
+        "kn": [],
+        "hi": [],
+        "ml": []
+      }
+    },
+    {
+      "require": [],
+      "id": "nut_fall_other",
+      "topic": "koleroga",
+      "questions": [
+        "Why are my young nuts falling?",
+        "Nuts are falling but I see no patch",
+        "What is nut splitting?",
+        "What is button shedding?"
+      ],
+      "keywords": [
+        "button",
+        "shedding",
+        "young",
+        "splitting",
+        "split",
+        "pollination",
+        "fall"
+      ],
+      "answer": "Young nuts and buttons can also fall because of poor pollination, lack of nutrients, water stress or heat, not only Mahali. Look for a water-soaked patch before deciding it is Mahali. Nuts that split at the tip are a different problem linked to growing conditions, not Mahali.",
+      "sources": [
+        "S2"
+      ],
+      "classes": [
+        "Healthy_Nut"
+      ],
+      "needs_expert_review": false,
+      "deployment_dependent": false,
+      "i18n": {
+        "kn": null,
+        "hi": null,
+        "ml": null
+      },
+      "questions_i18n": {
+        "kn": [],
+        "hi": [],
+        "ml": []
+      }
+    },
+    {
+      "require": [],
+      "id": "what_is_yld",
+      "topic": "yellow",
+      "questions": [
+        "What is Yellow Leaf Disease?",
+        "Leaves are turning yellow from the tips",
+        "What are the signs of yellow leaf disease?",
+        "Why are my arecanut leaves yellow?"
+      ],
+      "keywords": [
+        "yellow",
+        "yld",
+        "leaf",
+        "tips",
+        "stripes",
+        "signs",
+        "symptoms"
+      ],
+      "answer": "In Yellow Leaf Disease the leaflet tips of the outer leaves turn yellow, and the yellowing spreads along the edges with green stripes left between. The tips dry out. Later the leaves become small, stiff and pointed and the crown gets smaller. Roots can turn black and nuts can be small. The signs are clearest from September to November. Spotted leaves can be a different problem (leaf spot), so please confirm with an expert.",
+      "sources": [
+        "S2",
+        "S4"
+      ],
+      "classes": [
+        "Yellow_Leaf"
+      ],
+      "needs_expert_review": false,
+      "deployment_dependent": false,
+      "i18n": {
+        "kn": null,
+        "hi": null,
+        "ml": null
+      },
+      "questions_i18n": {
+        "kn": [],
+        "hi": [],
+        "ml": []
+      }
+    },
+    {
+      "require": [],
+      "id": "yld_cause",
+      "topic": "yellow",
+      "questions": [
+        "What causes yellow leaf disease?",
+        "Is it a virus or a fungus?",
+        "Is yellow leaf disease spread by insects?"
+      ],
+      "keywords": [
+        "cause",
+        "virus",
+        "fungus",
+        "phytoplasma",
+        "insect",
+        "hopper",
+        "spread"
+      ],
+      "answer": "ICAR-CPCRI links Yellow Leaf Disease to a phytoplasma spread by a plant hopper. The cause is not fully settled: one Indian study did not find a phytoplasma in the palms it tested, and another study notes that similar yellowing has been linked to different pathogens in different regions.",
+      "sources": [
+        "S2",
+        "S6",
+        "S7"
+      ],
+      "classes": [
+        "Yellow_Leaf"
+      ],
+      "needs_expert_review": false,
+      "deployment_dependent": false,
+      "i18n": {
+        "kn": null,
+        "hi": null,
+        "ml": null
+      },
+      "questions_i18n": {
+        "kn": [],
+        "hi": [],
+        "ml": []
+      }
+    },
+    {
+      "require": [],
+      "id": "yld_treatment",
+      "topic": "yellow",
+      "questions": [
+        "How to treat yellow leaf disease?",
+        "Is there a cure for yellow leaf?",
+        "What spray should I use for yellow leaf?",
+        "What can I do for yellow palms?"
+      ],
+      "keywords": [
+        "treatment",
+        "cure",
+        "remedy",
+        "spray",
+        "fertilizer",
+        "manure",
+        "drainage",
+        "remove",
+        "palms"
+      ],
+      "answer": "There is no spray that cures this disease, so good care of the garden is the main defence. Give fertilizer and organic manure regularly in two splits each year, avoid water standing in the garden, grow cover crops between palms, and consider removing badly affected palms to slow the spread. ICAR-CPCRI lists 100 g nitrogen, 40 g phosphorus and 140 g potash per palm per year, plus 800 g Mussorie phos and 12 kg each of compost and green leaf, but please confirm current doses with your agricultural officer. Do not use antibiotic or insecticide sprays on your own.",
+      "sources": [
+        "S2",
+        "S8"
+      ],
+      "classes": [
+        "Yellow_Leaf"
+      ],
+      "needs_expert_review": true,
+      "deployment_dependent": false,
+      "i18n": {
+        "kn": null,
+        "hi": null,
+        "ml": null
+      },
+      "questions_i18n": {
+        "kn": [],
+        "hi": [],
+        "ml": []
+      }
+    },
+    {
+      "require": [],
+      "id": "leaf_spot",
+      "topic": "yellow",
+      "questions": [
+        "What is leaf spot?",
+        "Brown spots on leaves with a yellow ring",
+        "Black spots on my arecanut leaf"
+      ],
+      "keywords": [
+        "spot",
+        "spots",
+        "brown",
+        "black",
+        "ring",
+        "halo",
+        "leaf spot"
+      ],
+      "answer": "Leaf spot shows small brown to black round spots with a yellow ring, mostly in the monsoon, more often on palms under 10 years old and usually on the lower leaves. A 1% Bordeaux mixture spray is listed for it. Please confirm with an expert, because spotted leaves can also be Yellow Leaf Disease.",
+      "sources": [
+        "S2"
+      ],
+      "classes": [
+        "Yellow_Leaf"
+      ],
+      "needs_expert_review": false,
+      "deployment_dependent": false,
+      "i18n": {
+        "kn": null,
+        "hi": null,
+        "ml": null
+      },
+      "questions_i18n": {
+        "kn": [],
+        "hi": [],
+        "ml": []
+      }
+    },
+    {
+      "require": [],
+      "id": "foot_rot",
+      "topic": "yellow",
+      "questions": [
+        "The outer leaves are yellow and drooping",
+        "There is brown ooze at the base of the trunk",
+        "What is Anabe roga?",
+        "What is foot rot?"
+      ],
+      "keywords": [
+        "anabe",
+        "foot",
+        "trunk",
+        "base",
+        "ooze",
+        "drooping",
+        "droop"
+      ],
+      "answer": "Yellowing of the outer leaves, which then droop and fall, with a brown patch or brown ooze at the base of the trunk, can be foot rot (Anabe roga). This needs expert help.",
+      "sources": [
+        "S2"
+      ],
+      "classes": [],
+      "needs_expert_review": false,
+      "deployment_dependent": false,
+      "i18n": {
+        "kn": null,
+        "hi": null,
+        "ml": null
+      },
+      "questions_i18n": {
+        "kn": [],
+        "hi": [],
+        "ml": []
+      }
+    },
+    {
+      "require": [],
+      "id": "yld_vs_leafspot",
+      "topic": "yellow",
+      "questions": [
+        "How to tell yellow leaf disease from leaf spot?",
+        "What is the difference between yellow leaf and leaf spot?"
+      ],
+      "keywords": [
+        "difference",
+        "tell",
+        "versus",
+        "compare",
+        "distinguish"
+      ],
+      "answer": "Yellow Leaf Disease starts with yellow tips on the outer leaves that spread along the edges, with green stripes left between. Leaf spot shows separate brown or black round spots with a yellow ring. Both can look similar in a photo, so please show the palm to an expert.",
+      "sources": [
+        "S2"
+      ],
+      "classes": [
+        "Yellow_Leaf"
+      ],
+      "needs_expert_review": false,
+      "deployment_dependent": false,
+      "i18n": {
+        "kn": null,
+        "hi": null,
+        "ml": null
+      },
+      "questions_i18n": {
+        "kn": [],
+        "hi": [],
+        "ml": []
+      }
+    },
+    {
+      "require": [
+        "bordeaux"
+      ],
+      "id": "bordeaux_for_yld",
+      "topic": "yellow",
+      "questions": [
+        "Can I spray Bordeaux mixture for yellow leaf disease?",
+        "Does Bordeaux mixture cure yellow leaf?"
+      ],
+      "keywords": [
+        "bordeaux",
+        "yellow"
+      ],
+      "answer": "No. Bordeaux mixture is listed for fruit rot (Mahali) and for leaf spot, not as a treatment for Yellow Leaf Disease.",
+      "sources": [
+        "S2"
+      ],
+      "classes": [
+        "Yellow_Leaf"
+      ],
+      "needs_expert_review": false,
+      "deployment_dependent": false,
+      "i18n": {
+        "kn": null,
+        "hi": null,
+        "ml": null
+      },
+      "questions_i18n": {
+        "kn": [],
+        "hi": [],
+        "ml": []
+      }
+    },
+    {
+      "require": [],
+      "id": "bordeaux_how",
+      "topic": "spray",
+      "questions": [
+        "How to make Bordeaux mixture?",
+        "How much copper sulphate and lime do I need?",
+        "Bordeaux mixture preparation"
+      ],
+      "keywords": [
+        "make",
+        "prepare",
+        "preparation",
+        "copper",
+        "sulphate",
+        "lime",
+        "recipe",
+        "quantity",
+        "bordeaux"
+      ],
+      "answer": "The exact preparation steps are still being verified for this app. Please ask your agricultural officer or Krishi Vigyan Kendra (KVK) to show you how to prepare 1% Bordeaux mixture. When spraying, wear gloves, a mask and eye protection, keep children and animals away, and wash your hands afterwards.",
+      "sources": [
+        "S1"
+      ],
+      "classes": [],
+      "needs_expert_review": true,
+      "deployment_dependent": false,
+      "i18n": {
+        "kn": null,
+        "hi": null,
+        "ml": null
+      },
+      "questions_i18n": {
+        "kn": [],
+        "hi": [],
+        "ml": []
+      }
+    },
+    {
+      "require": [],
+      "id": "photo_tips",
+      "topic": "app",
+      "questions": [
+        "How do I take a good photo?",
+        "The photo is blurry, what should I do?",
+        "Photo tips",
+        "How should I use the camera?"
+      ],
+      "keywords": [
+        "photo",
+        "camera",
+        "tips",
+        "blur",
+        "retake",
+        "angle",
+        "daylight"
+      ],
+      "answer": "Take the photo in daylight, hold the camera steady, and fill the picture with one leaf or one nut. Try a plain background and avoid strong glare. You can also photograph the same plant from another angle.",
+      "sources": [],
+      "classes": [],
+      "needs_expert_review": false,
+      "deployment_dependent": false,
+      "i18n": {
+        "kn": null,
+        "hi": null,
+        "ml": null
+      },
+      "questions_i18n": {
+        "kn": [],
+        "hi": [],
+        "ml": []
+      }
+    },
+    {
+      "require": [],
+      "id": "why_unsure",
+      "topic": "app",
+      "questions": [
+        "Why does it say not sure?",
+        "What does unsure mean?",
+        "Why did I get no result?"
+      ],
+      "keywords": [
+        "unsure",
+        "not sure",
+        "uncertain",
+        "confidence",
+        "no result"
+      ],
+      "answer": "The app says 'not sure' when the model is not confident enough. A 'healthy' answer needs very high confidence (95%), because missing a disease costs more than taking another photo. A disease answer needs at least 70%. Please retake the photo, or show the palm to an agricultural officer.",
+      "sources": [],
+      "classes": [],
+      "needs_expert_review": false,
+      "deployment_dependent": false,
+      "i18n": {
+        "kn": null,
+        "hi": null,
+        "ml": null
+      },
+      "questions_i18n": {
+        "kn": [],
+        "hi": [],
+        "ml": []
+      }
+    },
+    {
+      "require": [],
+      "id": "heatmap_meaning",
+      "topic": "app",
+      "questions": [
+        "What is the heatmap?",
+        "What do the red and yellow colours mean?",
+        "Why does the app show colours on my photo?"
+      ],
+      "keywords": [
+        "heatmap",
+        "colour",
+        "red",
+        "highlight",
+        "explain",
+        "where"
+      ],
+      "answer": "The heatmap shows where the model looked in your photo: red and yellow areas mattered most. It does not prove the cause of the problem. Only an expert can confirm a disease.",
+      "sources": [],
+      "classes": [],
+      "needs_expert_review": false,
+      "deployment_dependent": false,
+      "i18n": {
+        "kn": null,
+        "hi": null,
+        "ml": null
+      },
+      "questions_i18n": {
+        "kn": [],
+        "hi": [],
+        "ml": []
+      }
+    },
+    {
+      "require": [],
+      "id": "accuracy",
+      "topic": "app",
+      "questions": [
+        "How accurate is this app?",
+        "Can I trust the result?",
+        "Is the app always right?"
+      ],
+      "keywords": [
+        "accuracy",
+        "trust",
+        "reliable",
+        "correct",
+        "right",
+        "wrong",
+        "mistake"
+      ],
+      "answer": "On the dataset photos we tested, the model was right about 99.6% of the time. On new phone photos it can be less accurate, especially for nuts held in a hand and for spotted leaves. Treat the result as a first guess, not a diagnosis, and ask an expert if you are worried.",
+      "sources": [],
+      "classes": [],
+      "needs_expert_review": false,
+      "deployment_dependent": false,
+      "i18n": {
+        "kn": null,
+        "hi": null,
+        "ml": null
+      },
+      "questions_i18n": {
+        "kn": [],
+        "hi": [],
+        "ml": []
+      }
+    },
+    {
+      "require": [],
+      "id": "healthy_meaning",
+      "topic": "app",
+      "questions": [
+        "What does a healthy result mean?",
+        "Is my plant fully healthy if the app says healthy?"
+      ],
+      "keywords": [
+        "healthy",
+        "mean",
+        "guarantee",
+        "fully"
+      ],
+      "answer": "'Healthy' means no signs of the diseases this app knows about were found in this photo. A photo cannot show an early or hidden infection, so keep checking, especially after heavy rain and from September to November.",
+      "sources": [],
+      "classes": [],
+      "needs_expert_review": false,
+      "deployment_dependent": false,
+      "i18n": {
+        "kn": null,
+        "hi": null,
+        "ml": null
+      },
+      "questions_i18n": {
+        "kn": [],
+        "hi": [],
+        "ml": []
+      }
+    },
+    {
+      "require": [],
+      "id": "scope",
+      "topic": "app",
+      "questions": [
+        "What diseases can this app find?",
+        "Which problems does the app detect?",
+        "Can it detect pests?"
+      ],
+      "keywords": [
+        "detect",
+        "diseases",
+        "pests",
+        "scope",
+        "other",
+        "find",
+        "recognise"
+      ],
+      "answer": "The app knows four results: healthy leaf, healthy nut, Mahali/Koleroga fruit rot, and yellow leaf disease or leaf spot. It cannot recognise other diseases, pests, nutrient problems, or photos that are not arecanut leaves or nuts.",
+      "sources": [],
+      "classes": [],
+      "needs_expert_review": false,
+      "deployment_dependent": false,
+      "i18n": {
+        "kn": null,
+        "hi": null,
+        "ml": null
+      },
+      "questions_i18n": {
+        "kn": [],
+        "hi": [],
+        "ml": []
+      }
+    },
+    {
+      "require": [],
+      "id": "when_expert",
+      "topic": "app",
+      "questions": [
+        "When should I call an expert?",
+        "When should I contact the agricultural officer?",
+        "Who can I ask for help?"
+      ],
+      "keywords": [
+        "expert",
+        "officer",
+        "kvk",
+        "help",
+        "contact",
+        "call"
+      ],
+      "answer": "Ask an agricultural officer or Krishi Vigyan Kendra (KVK) if many nuts are falling, if the new spindle leaf in the crown yellows or rots, if you see brown ooze at the trunk base, if yellowing spreads over many palms, if the app says 'not sure', or before you decide on any treatment.",
+      "sources": [],
+      "classes": [],
+      "needs_expert_review": false,
+      "deployment_dependent": false,
+      "i18n": {
+        "kn": null,
+        "hi": null,
+        "ml": null
+      },
+      "questions_i18n": {
+        "kn": [],
+        "hi": [],
+        "ml": []
+      }
+    },
+    {
+      "require": [],
+      "id": "check_timing",
+      "topic": "app",
+      "questions": [
+        "When should I check my palms?",
+        "What is the best time to inspect leaves?",
+        "When does yellowing appear?"
+      ],
+      "keywords": [
+        "season",
+        "month",
+        "september",
+        "november",
+        "inspect",
+        "check",
+        "timing"
+      ],
+      "answer": "Check leaves more often from September to November, when yellowing is easiest to see, and check nuts after heavy rain, because fruit rot spreads in wet monsoon weather.",
+      "sources": [
+        "S1",
+        "S2"
+      ],
+      "classes": [],
+      "needs_expert_review": false,
+      "deployment_dependent": false,
+      "i18n": {
+        "kn": null,
+        "hi": null,
+        "ml": null
+      },
+      "questions_i18n": {
+        "kn": [],
+        "hi": [],
+        "ml": []
+      }
+    },
+    {
+      "require": [],
+      "id": "privacy",
+      "topic": "app",
+      "questions": [
+        "Are my photos saved?",
+        "Is my data safe?",
+        "Does the app store my pictures?"
+      ],
+      "keywords": [
+        "saved",
+        "store",
+        "privacy",
+        "data",
+        "safe",
+        "private"
+      ],
+      "answer": "In this version your photo is sent to the app server to be checked and is not saved there by the app. Recent results are kept as small pictures only in your own browser history, and you can clear them with 'Clear history'. [Check this against your deployment before release.]",
+      "sources": [],
+      "classes": [],
+      "needs_expert_review": false,
+      "deployment_dependent": true,
+      "i18n": {
+        "kn": null,
+        "hi": null,
+        "ml": null
+      },
+      "questions_i18n": {
+        "kn": [],
+        "hi": [],
+        "ml": []
+      }
+    },
+    {
+      "require": [],
+      "id": "offline",
+      "topic": "app",
+      "questions": [
+        "Does it work without internet?",
+        "Is there an offline mode?"
+      ],
+      "keywords": [
+        "offline",
+        "internet",
+        "network",
+        "signal",
+        "connection"
+      ],
+      "answer": "This version needs a connection to the app server to check a photo. A version that runs fully on the phone without internet is planned. [Update this answer to match your deployment.]",
+      "sources": [],
+      "classes": [],
+      "needs_expert_review": false,
+      "deployment_dependent": true,
+      "i18n": {
+        "kn": null,
+        "hi": null,
+        "ml": null
+      },
+      "questions_i18n": {
+        "kn": [],
+        "hi": [],
+        "ml": []
+      }
+    },
+    {
+      "require": [],
+      "id": "languages",
+      "topic": "app",
+      "questions": [
+        "Can I change the language?",
+        "Is Kannada, Hindi or Malayalam available?"
+      ],
+      "keywords": [
+        "language",
+        "kannada",
+        "hindi",
+        "malayalam",
+        "english",
+        "translate"
+      ],
+      "answer": "Use the language menu at the top to switch between English, Kannada, Hindi and Malayalam. Some translations are drafts that native speakers have not checked yet, so English is the reference.",
+      "sources": [],
+      "classes": [],
+      "needs_expert_review": false,
+      "deployment_dependent": false,
+      "i18n": {
+        "kn": null,
+        "hi": null,
+        "ml": null
+      },
+      "questions_i18n": {
+        "kn": [],
+        "hi": [],
+        "ml": []
+      }
+    }
+  ],
+  "sources": {
+    "S1": {
+      "title": "Koleroga (Mahali) of arecanut, Extension Folder No. 17",
+      "publisher": "ICAR-CPCRI, Kasaragod",
+      "year": "1989",
+      "url": "https://cpcri.gov.in/filemgr/webfs/publication/ext17.pdf",
+      "used_for": "Koleroga symptoms, 1% Bordeaux spray timing, destroying fallen nuts, Bordeaux preparation"
+    },
+    "S2": {
+      "title": "Disease management strategies in arecanut and cocoa, Extension Publication No. 69",
+      "publisher": "ICAR-CPCRI, Regional Station Vittal",
+      "year": "1999",
+      "url": "https://cpcri.icar.gov.in/filemgr/webfs/publication/disease_management_strategies_in_arecanut_and_cocoa(eng)_1.pdf",
+      "used_for": "Koleroga, bud and crown rot, Yellow Leaf Disease symptoms and management, leaf spot, foot rot, polythene covers"
+    },
+    "S3": {
+      "title": "Arecanut: Mahali / Kolerogo / fruit rot",
+      "publisher": "TNAU Agritech Portal",
+      "year": "2015",
+      "url": "https://agritech.tnau.ac.in/crop_protection/arecanut_diseases_3.html",
+      "used_for": "Collecting and burning fallen nuts"
+    },
+    "S4": {
+      "title": "Arecanut: Yellow leaf disease",
+      "publisher": "TNAU Agritech Portal",
+      "year": "2015",
+      "url": "https://agritech.tnau.ac.in/crop_protection/arecanut_diseases_2.html",
+      "used_for": "Yellow Leaf Disease symptoms"
+    },
+    "S5": {
+      "title": "Management of fruit rot disease of arecanut (Areca catechu L.) caused by Phytophthora meadii",
+      "publisher": "ICAR KRISHI repository (ICAR-CPCRI)",
+      "year": "2019",
+      "url": "https://krishi.icar.gov.in/jspui/handle/123456789/81837",
+      "used_for": "Cause of fruit rot (Phytophthora meadii)"
+    },
+    "S6": {
+      "title": "Adkar-Purushothama et al., phytoplasma detection in yellow leaf disease affected areca palms",
+      "publisher": "Bulletin of Insectology 60(2)",
+      "year": "2007",
+      "url": "https://archive.bulletinofinsectology.org/pdfarticles/vol60-2007-161-162adkarpurushothama.pdf",
+      "used_for": "No phytoplasma found in the palms tested"
+    },
+    "S7": {
+      "title": "Detection of the phytoplasmas associated with yellow leaf disease of Areca catechu L. in Hainan province of China by nested PCR",
+      "publisher": "Chinese Agricultural Science Bulletin 26(22)",
+      "year": "2010",
+      "url": "https://www.casb.org.cn/EN/Y2010/V26/I22/381",
+      "used_for": "Similar yellowing symptoms linked to different pathogens in different regions"
+    },
+    "S8": {
+      "title": "Arecanut: Yellow Leaf Disease (Phytoplasma)",
+      "publisher": "Kerala Agricultural University",
+      "year": "not stated",
+      "url": "https://celkau.in/crops/plantation/arecanut/yellowleaf.php",
+      "used_for": "Removing affected palms. Its antibiotic and insecticide recommendations were deliberately not used."
+    },
+    "S9": {
+      "title": "Role of systemic fungicide metalaxyl mancozeb in management of Koleroga of arecanut in Central Western Ghats of Karnataka",
+      "publisher": "Journal article (i-Scholar listing)",
+      "year": "not stated",
+      "url": "https://www.i-scholar.in/index.php/Ajbs/article/view/153564",
+      "used_for": "Bordeaux spray after the disease appears does not give satisfactory control"
+    }
+  }
+}

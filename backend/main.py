@@ -12,21 +12,9 @@ from starlette.concurrency import run_in_threadpool
 
 from .inference import Predictor, load_disease_info
 from .preprocessing import MAX_BYTES
-from .chat import chat_answer, online_chat_available
+from .chat_api import router as chat_router
 
 logger = logging.getLogger(__name__)
-
-
-class ChatTurn(BaseModel):
-    role: Literal["user", "assistant"]
-    content: str = Field(min_length=1, max_length=1000)
-
-
-class ChatRequest(BaseModel):
-    message: str = Field(min_length=1, max_length=1000)
-    mode: Literal["offline", "online"] = "offline"
-    language: Literal["en", "kn", "hi", "ml"] = "en"
-    history: list[ChatTurn] = Field(default_factory=list, max_length=6)
 
 
 @asynccontextmanager
@@ -44,6 +32,7 @@ async def lifespan(app):
 app = FastAPI(title="Arecanut XAI API", version="1.0.0", lifespan=lifespan)
 app.add_middleware(CORSMiddleware, allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
                    allow_credentials=False, allow_methods=["GET", "POST"], allow_headers=["*"])
+app.include_router(chat_router)
 
 
 @app.get("/api/health")
@@ -56,26 +45,6 @@ def health():
 @app.get("/api/diseases")
 def diseases(language: Literal["en", "kn", "hi", "ml"] = "en"):
     return load_disease_info(language)
-
-
-@app.get("/api/chat/status")
-def chat_status():
-    return {"online_available": online_chat_available()}
-
-
-@app.post("/api/chat")
-def chat(payload: ChatRequest):
-    if not payload.message.strip():
-        raise HTTPException(status_code=400, detail="Enter a question.")
-    try:
-        history = [turn.model_dump() for turn in payload.history]
-        return {"answer": chat_answer(payload.message.strip(), payload.mode, payload.language, history)}
-    except RuntimeError as exc:
-        logger.warning("Chat request could not be completed: %s", exc)
-        raise HTTPException(status_code=503, detail=str(exc)) from exc
-    except Exception as exc:
-        logger.exception("Chat request failed")
-        raise HTTPException(status_code=502, detail="The chat service failed unexpectedly. Check the backend console for details.") from exc
 
 
 @app.get("/api/ready")
