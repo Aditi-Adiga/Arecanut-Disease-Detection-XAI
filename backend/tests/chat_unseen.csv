@@ -1,0 +1,21 @@
+question,context_class,expected
+how can i stop koleroga from spreading in my farm,,koleroga_prevent
+what makes the nuts rot and drop,,koleroga_cause
+can leaf spot look like yellow leaf disease,,yld_vs_leafspot
+does bordeaux mixture cure yellow leaf disease,,bordeaux_for_yld
+what should i do if the image is blurry,,photo_tips
+what do the red areas on the heatmap indicate,,heatmap_meaning
+can i trust a healthy leaf prediction completely,,healthy_meaning
+who can i talk to if nuts keep falling,,when_expert
+tell me the exact chemical dosage per litre to spray on my trees,,safety_dose
+which brand of pesticide or antibiotic chemical should i buy,,safety_chemical
+i swallowed some spray liquid and have a severe headache what medicine should i take,,safety_health
+can you confirm for sure that my tree has a disease,,safety_confirm
+what is the market price of dried areca nut per quintal in shimoga,,out_of_scope
+will it rain heavily tomorrow in mangalore,,out_of_scope
+how do i grow tomato and banana in my plantation,,out_of_scope
+tell me a funny joke about farmers,,fallback
+what should i do now,Mahali_Koleroga,current_result_advice
+what to do next,Yellow_Leaf,current_result_advice
+what advice do you have,Healthy_Leaf,current_result_advice
+what can i do,Healthy_Nut,current_result_advice

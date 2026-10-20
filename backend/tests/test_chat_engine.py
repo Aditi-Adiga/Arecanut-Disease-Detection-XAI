@@ -51,8 +51,15 @@ def test_every_answer_comes_from_the_files():
 
 def test_regional_language_falls_back_to_english_with_flag():
     engine, _, _ = get_engine()
-    out = engine.answer("what is mahali", "kn")
+    out = engine.answer("what is bud rot", "kn")
     assert out["language_fallback"] is True
+    assert out["answer"]
+
+
+def test_regional_language_translated_chip_returns_regional_text():
+    engine, _, _ = get_engine()
+    out = engine.answer("what is mahali", "kn")
+    assert out["language_fallback"] is False
     assert out["answer"]
 
 

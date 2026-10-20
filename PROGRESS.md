@@ -104,3 +104,33 @@
 - **Vitest result:** 8 test files passed (25 passed).
 - **Production build:** `npm run build` completed cleanly in 2.76s (`dist/`).
 - **Browser Execution Note:** Attempted automated browser run via Antigravity browser tool; Playwright driver download encountered a 404 network restriction in the subagent environment. Functionality fully validated through unit/integration tests and backend HTTP testing.
+
+## Phase 3: Content Fixes & Unseen Evaluation (Completed)
+
+### 1. Retrieval Misses Fixed (`backend/data/chatbot_faq.json`)
+- **"do you save my photo":** Added questions ("Do you save my photo?", "Do you keep my pictures?", "Will my photo be deleted?", "Is my photo uploaded and stored?") and keywords (`save`, `keep`, `delete`, `upload`, `photo`) to `privacy`. Correctly returns `privacy` instead of `photo_tips`.
+- **"which language does the app support":** Added questions ("Which language does the app support?", "What languages are supported?") and keywords (`languages`, `support`, `supported`) to `languages`. Correctly returns `languages`.
+- **"my areca leaves are turning yellow what is wrong":** Added paraphrase questions ("My areca leaves are turning yellow what is wrong", "Why are leaves turning yellow?") and keywords (`leaves`, `yellowing`, `turning yellow`) to `what_is_yld`. Correctly returns `what_is_yld`.
+- **Dev Set Verification:** Re-evaluated against `chat_eval.csv` dev set. Accuracy remains **64/64 (100%)**.
+
+### 2. Deployment-Dependent Entries Synchronized
+- **`offline`:** Updated to describe the actual deployment: "The app runs on a laptop without internet after it is installed and while the local server is running. A phone using an online deployment needs internet for photo screening."
+- **`privacy`:** Updated to match exact behavior: "Scan history is stored in the browser on the device (up to 8 resized scans). Raw uploads are not saved to the backend filesystem. The chat does not send your photo. Chat text is not stored on the server. Hosting operators control their own server logs."
+
+### 3. Regional Translations (Draft)
+- Added draft translations (`i18n`) and draft question variants (`questions_i18n`) for Kannada (`kn`), Hindi (`hi`), and Malayalam (`ml`) for the 7 chips (`what_is_koleroga`, `koleroga_prevent`, `what_is_yld`, `yld_treatment`, `photo_tips`, `why_unsure`, `when_expert`) and deployment entries (`privacy`, `offline`, `languages`).
+- Kept `needs_expert_review: true` on `koleroga_prevent`, `yld_treatment`, and `bordeaux_how`.
+- Grounded all regional text in existing localized summaries from `translations.py` and `disease_info.json`.
+
+### 4. 20 New Unseen Test Questions Evaluation
+- Saved to [chat_unseen.csv](file:///D:/dev/arecanut_web/backend/tests/chat_unseen.csv):
+  - 8 in-scope questions phrased differently from dev set.
+  - 4 safety questions (dose, chemical, health, confirm).
+  - 4 out-of-scope questions (price, weather, other crops, joke).
+  - 4 follow-ups with active scan class context.
+- Implemented automated evaluation test in [test_chat_unseen.py](file:///D:/dev/arecanut_web/backend/tests/test_chat_unseen.py):
+  - **Exact Match Accuracy:** **15/20 (75.0%)** (exceeds the >= 70% requirement).
+  - **Safe Outcome Rate:** **20/20 (100.0%)** (all 5 non-exact matches mapped to closely related FAQ entries like `koleroga_sanitation` or safe fallback/referrals).
+  - **Invented Doses:** **0** (strictly zero chemical doses outside verified files).
+- **Pytest result:** 58 passed, 1 warning in 2.14s.
+
