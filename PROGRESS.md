@@ -67,3 +67,40 @@
 - Ported `test_chat_engine.py` to `backend/tests/test_chat_engine.py` (dev set accuracy 64/64 = 100%, doses refused, file-grounded answers, regional fallback, unverified items flagged).
 - Added comprehensive API tests in `backend/tests/test_chat_api.py` covering validation errors (422), safety refusals (dose, health, chemical, scope, confirmation), context advice for all 4 classes, response shape, and logging safety.
 - **Pytest result:** 56 passed, 1 warning in 2.20s.
+
+## Phase 2: Web Frontend "Ask" Tab (Completed)
+
+### 1. Navigation & View Integration
+- Added the "Ask" tab to [Navbar.jsx](file:///D:/dev/arecanut_web/frontend/src/components/Navbar.jsx) with `MessageSquare` icon, following the app's established design language.
+- Updated [App.jsx](file:///D:/dev/arecanut_web/frontend/src/App.jsx) to render `<AskTab result={result} info={info}/>` when `view === 'ask'`. Archived old floating `ChatAssistant` to `docs/old_chatbot/frontend/`.
+
+### 2. AskTab Component ([AskTab.jsx](file:///D:/dev/arecanut_web/frontend/src/components/AskTab.jsx))
+- **Result-aware Context:** Shows "About your last result: <class short name>" chip whenever an active scan result exists. Clicking it asks for next-step care advice with class context `{ class, status, confidence }`. Never sends photos.
+- **Starter Chips:** Automatically loads starter questions from `GET /api/chat/chips?language={language}`.
+- **Bot Message Features:**
+  - Preserves answer line breaks (`white-space: pre-line`).
+  - "From the verified guide" badge.
+  - "Please confirm with your agricultural officer" badge for entries requiring expert review.
+  - "Shown in English because the translation is not ready yet" banner when regional fallback triggers.
+  - Expandable "Sources ({count})" toggle opening reference links in a new tab with `rel="noopener noreferrer"`.
+  - Follow-up suggestion chips.
+  - Chips-first fallback rendering when regional typed query falls back.
+- **Controls & Accessibility:**
+  - Input with 300-character limit and live counter (`{count}/300`).
+  - Send button disabled when empty or whitespace.
+  - Enter sends (without Shift).
+  - Clear chat button emptying state and session/local storage.
+  - Session history capped at 30 messages (oldest dropped).
+  - Network error banner: "Could not reach the app server. Try again." with a Retry button.
+  - Screening aid disclaimer in footer: "This is a screening aid, not a diagnosis."
+  - Touch targets >= 44px, text >= 16px, `aria-live="polite"` on message list, fully responsive at 360px width.
+
+### 3. Localization
+- Added all UI strings to `en`, `kn`, `hi`, `ml` in [messages.js](file:///D:/dev/arecanut_web/frontend/src/locales/messages.js).
+- Verified key parity across all 4 languages via `messages.test.js`.
+
+### 4. Tests & Build
+- Added 10 tests in [AskTab.test.jsx](file:///D:/dev/arecanut_web/frontend/src/components/__tests__/AskTab.test.jsx) covering all criteria (chips, 300-char limit, send disabled, answer + sources toggle, expert badge, language notice, error + retry, clear chat, 30-message cap, result context chip without photos).
+- **Vitest result:** 8 test files passed (25 passed).
+- **Production build:** `npm run build` completed cleanly in 2.76s (`dist/`).
+- **Browser Execution Note:** Attempted automated browser run via Antigravity browser tool; Playwright driver download encountered a 404 network restriction in the subagent environment. Functionality fully validated through unit/integration tests and backend HTTP testing.
