@@ -93,14 +93,26 @@ class ChatEngine:
             out.append({"id": eid, "question": qs[0]})
         return out
 
-    def _reply(self, answer, intent, entry=None, sources=(), score=0.0, refused=False, lang="en", suggestions=None):
+    def _reply(self, answer, intent, entry=None, sources=(), score=0.0, refused=False, lang="en",
+                suggestions=None, i18n_map=None):
+        """Build a reply dict.  *i18n_map* is an optional {lang: text} dict used
+        to translate safety/fallback strings that are not stored in an entry."""
         fallback_lang = False
-        if entry is not None and lang != "en":
-            translated = (entry.get("i18n") or {}).get(lang)
-            if translated:
-                answer = translated
-            else:
-                fallback_lang = True
+        if lang != "en":
+            if entry is not None:
+                # FAQ entry: use its i18n block
+                translated = (entry.get("i18n") or {}).get(lang)
+                if translated:
+                    answer = translated
+                else:
+                    fallback_lang = True
+            elif i18n_map is not None:
+                # Safety / fallback: use the caller-supplied map
+                translated = i18n_map.get(lang)
+                if translated:
+                    answer = translated
+                else:
+                    fallback_lang = True
         return {"answer": answer, "intent": intent, "entry_id": entry["id"] if entry else None,
                 "sources": list(sources), "score": round(score, 3), "refused": refused,
                 "needs_expert_review": bool(entry and entry.get("needs_expert_review")),
@@ -125,31 +137,39 @@ class ChatEngine:
     def answer(self, message, language="en", context=None):
         msg = (message or "").strip()
         ctx = context or {}
-        if not msg:
-            return self._reply(self.faq["fallback"]["text"], "fallback", lang=language)
-        low = msg.lower()
+        fb = self.faq["fallback"]
         s = self.faq["safety"]
+        if not msg:
+            return self._reply(fb["text"], "fallback", lang=language,
+                               i18n_map=fb.get("i18n"))
+        low = msg.lower()
         if _HEALTH.search(low):
-            return self._reply(s["health"], "safety_health", refused=True, lang=language)
+            return self._reply(s["health"], "safety_health", refused=True, lang=language,
+                               i18n_map=s.get("health_i18n"))
         if re.search(r"bordeaux|bordo", low) and (_DOSE.search(low) or re.search(r"copper|sulphate|lime|make|prepar", low)):
             return self._reply(self.entries["bordeaux_how"]["answer"], "bordeaux_how",
                                entry=self.entries["bordeaux_how"], sources=self.entries["bordeaux_how"]["sources"], lang=language)
         if _DOSE.search(low):
-            return self._reply(s["dose"], "safety_dose", refused=True, lang=language)
+            return self._reply(s["dose"], "safety_dose", refused=True, lang=language,
+                               i18n_map=s.get("dose_i18n"))
         if _CHEM.search(low):
-            return self._reply(s["chemical"], "safety_chemical", refused=True, lang=language)
+            return self._reply(s["chemical"], "safety_chemical", refused=True, lang=language,
+                               i18n_map=s.get("chemical_i18n"))
         if _OUT.search(low):
-            return self._reply(s["out_of_scope"], "out_of_scope", refused=True, lang=language)
+            return self._reply(s["out_of_scope"], "out_of_scope", refused=True, lang=language,
+                               i18n_map=s.get("out_of_scope_i18n"))
         qtok = tokens(msg)
         if _CONFIRM.search(low):
-            return self._reply(s["confirm"], "safety_confirm", refused=True, lang=language)
+            return self._reply(s["confirm"], "safety_confirm", refused=True, lang=language,
+                               i18n_map=s.get("confirm_i18n"))
         if ctx.get("class") and _ADVICE.search(low) and not (set(qtok) & _TOPIC):
             r = self._current_result_advice(ctx, language)
             if r:
                 return r
         known = [t for t in set(qtok) if t in self.idf]
         if not known:
-            return self._reply(self.faq["fallback"]["text"], "fallback", lang=language)
+            return self._reply(fb["text"], "fallback", lang=language,
+                               i18n_map=fb.get("i18n"))
         total = sum(self.idf[t] for t in known)
         best, second = (None, 0.0), 0.0
         for eid, e in self.entries.items():
@@ -168,7 +188,8 @@ class ChatEngine:
             elif score > second:
                 second = score
         if best[0] is None or best[1] < self.min_score:
-            return self._reply(self.faq["fallback"]["text"], "fallback", score=best[1], lang=language)
+            return self._reply(fb["text"], "fallback", score=best[1], lang=language,
+                               i18n_map=fb.get("i18n"))
         e = self.entries[best[0]]
         same = [x for x, ee in self.entries.items() if ee["topic"] == e["topic"] and x != e["id"]][:3]
         return self._reply(e["answer"], "faq", entry=e, sources=e["sources"], score=best[1], lang=language,
