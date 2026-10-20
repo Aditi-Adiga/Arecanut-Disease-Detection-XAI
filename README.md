@@ -82,39 +82,68 @@ For an independent saved Colab baseline, run `colab_reference_export.py` as one 
 ```
 
 Investigate any difference before describing Colab/app parity as verified.
-
 ## API
 
-- `GET /api/health`: model availability.
-- `GET /api/diseases?language=en`: reference information in `en`, `kn`, `hi` or `ml`.
-- `POST /api/predict?language=en`: multipart `file`; returns probabilities, result status, CAM overlay, resized input and deterministic explanation. Language changes text only.
-- `GET /api/chat/status`: whether optional online chat is configured.
-- `POST /api/chat`: JSON `{ "message": "...", "mode": "offline", "language": "en", "history": [] }`; returns `{ "answer": "..." }`. Offline answers use the local guide and app help. Questions are limited to 1,000 characters; up to six recent user/assistant turns may be included for online follow-ups.
-- `/docs`: interactive FastAPI API documentation.
+- `GET /api/health` – model availability.
+- `GET /api/diseases?language=en` – reference information in `en`, `kn`, `hi` or `ml`.
+- `POST /api/predict?language=en` – multipart `file`; returns probabilities, result status, CAM overlay, resized input and deterministic explanation.
+- `GET /api/chat/chips?language=en` – starter question chips for the Ask tab.
+- `GET /api/chat/status` – returns `{"online_enabled": false}` (online mode is Phase 6).
+- `POST /api/chat` – offline knowledge-grounded chat.
+- `/docs` – interactive FastAPI API documentation.
 
-### Optional online chatbot
+### `POST /api/chat` schema
 
-Offline chat is the default and requires no extra package, provider account, or network access. To enable online answers, configure these environment variables on the **backend server only**:
-
-- `CHATBOT_API_KEY` (required): provider API key.
-- `CHATBOT_API_URL` (optional): full OpenAI-compatible chat-completions HTTPS endpoint; defaults to `https://api.openai.com/v1/chat/completions`.
-- `CHATBOT_MODEL` (optional): provider model name; defaults to `gpt-4o-mini`.
-
-For local PowerShell development, enter the key at a hidden prompt, then start the backend in the same terminal:
-
-```powershell
-$secret = Read-Host "Enter your AI provider API key" -AsSecureString
-$env:CHATBOT_API_KEY = [System.Net.NetworkCredential]::new("", $secret).Password
-$env:CHATBOT_MODEL = "gpt-4o-mini"
-Set-Location D:\dev\arecanut_web
-.\backend\.venv\Scripts\python.exe -m uvicorn backend.main:app --host 127.0.0.1 --port 8000
+**Request:**
+```json
+{
+  "message": "What is Koleroga?",
+  "language": "en",
+  "context": { "cls": "Mahali_Koleroga" }
+}
 ```
 
-For Render or another host, add `CHATBOT_API_KEY` as a private server environment variable in its dashboard; do not add the secret to `render.yaml`. Restart/redeploy the backend after configuration. Check `GET /api/chat/status`; online mode is available only when a key, HTTPS endpoint, and model are configured. Refresh the app after restarting the backend.
+| Field | Type | Rules |
+|---|---|---|
+| `message` | string | 1–300 chars (stripped), required |
+| `language` | enum | `en`, `kn`, `hi`, `ml` (default `en`) |
+| `context.cls` | enum or null | `Healthy_Leaf`, `Healthy_Nut`, `Mahali_Koleroga`, `Yellow_Leaf` |
 
-When online mode is selected, the user's question, up to six recent chat turns, and relevant guide text are sent to the configured provider; **photos and scan history are not sent**. Provider usage may incur charges and is governed by that provider's privacy and retention policies. Keep the key out of frontend files, source control, and client-side environment variables. Online provider failures are shown to the user and do not silently switch modes.
+**Response:**
+```json
+{
+  "intent": "faq",
+  "entry_id": "what_is_koleroga",
+  "answer": "Mahali (also called Koleroga) is a fruit rot...",
+  "language_fallback": false,
+  "needs_expert_review": false,
+  "sources": [{ "id": "S1", "label": "...", "url": "..." }],
+  "follow_up_chips": ["How to prevent Koleroga?", "..."],
+  "refused": false
+}
+```
 
-The assistant is informational, not diagnostic. Offline mode only retrieves supported app guidance and falls back when it cannot find a match. The online model is instructed not to diagnose or prescribe unverified chemical schedules. Both modes remind users that guide content is draft material requiring agricultural expert review.
+**Safety constraints (always enforced, never bypassed):**
+- Never mentions spray doses, mixing amounts, or chemical quantities.
+- Never says a disease is "confirmed" — only "suspected" or "consistent with".
+- Never accepts or returns photos.
+- Never logs message text on the server.
+- Rate-limited to 30 requests/minute/IP; returns `429` when exceeded.
+- `refused: true` on dose, chemical brand, health emergency, and disease-confirmation questions.
+
+### Optional online "Ask More" mode (Phase 6)
+
+Online mode is not yet enabled. When implemented, it will proxy through a backend endpoint with strict post-checks (dose hallucination regex, 15 s timeout) before returning any LLM response. The LLM will never see photos. Configure `ENABLE_LLM_CHAT=1` and `CHATBOT_API_KEY` as server-only environment variables — never in frontend files or source control.
+
+### Extending the FAQ
+
+To add a new entry to `backend/data/chatbot_faq.json`:
+1. Add an object to `entries[]` following the existing schema (required fields: `id`, `topic`, `questions`, `keywords`, `answer`, `sources`, `classes`, `needs_expert_review`, `deployment_dependent`, `i18n`, `questions_i18n`).
+2. If it should be a starter chip, add its `id` to the `chips[]` array.
+3. Grounded answers only: content must come from `sources[]` listed in the file; no invented doses or external references.
+4. Mark `needs_expert_review: true` for anything mentioning spray schedules, fertilizer rates, or antibiotics.
+5. Add draft translations in `i18n` and `questions_i18n` for `kn`, `hi`, `ml`.
+6. Re-run `pytest backend/tests/test_chat_engine.py` to verify dev-set accuracy stays ≥ 90 %.
 
 JPEG/PNG/WebP, maximum 10 MB and 24 MP. Images are decoded as RGB with TensorFlow and resized to 224×224 with `tf.image.resize(..., method="bilinear")`, raw float32 values in 0–255. The backbone contains normalization. The image is stretched like the training pipeline, not cropped. EXIF auto-rotation is deliberately not applied to avoid silently changing the supplied Colab loader.
 
@@ -134,3 +163,4 @@ Class order: Healthy_Leaf, Healthy_Nut, Mahali_Koleroga, Yellow_Leaf. Healthy re
 ## Hosting
 
 `Dockerfile` builds React and serves it with FastAPI, installs TensorFlow CPU on Linux, honours the host's `PORT`, and supports `/api/ready` to check actual model readiness. `render.yaml` requests a free Singapore web service from branch `codex/arecalens-webapp`. Its memory limit must be verified during deployment; do not silently select a paid plan after failure. Cloud hosting needs an account and configuration; a local build alone does not mean the app is deployed.
+
