@@ -66,3 +66,11 @@ def test_regional_language_translated_chip_returns_regional_text():
 def test_unverified_items_are_flagged():
     engine, _, _ = get_engine()
     assert engine.answer("how to make bordeaux mixture")["needs_expert_review"] is True
+
+
+def test_specific_content_queries():
+    engine, _, _ = get_engine()
+    assert engine.answer("do you save my photo")["entry_id"] == "privacy"
+    assert engine.answer("which language does the app support")["entry_id"] == "languages"
+    assert engine.answer("my areca leaves are turning yellow what is wrong")["entry_id"] == "what_is_yld"
+

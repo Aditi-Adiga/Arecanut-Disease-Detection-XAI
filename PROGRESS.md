@@ -206,3 +206,17 @@
   - `POST /api/chat` with bad language ("es") -> HTTP 422 Unprocessable Content.
   - `POST /api/chat` with "what should i do now" (context class `Mahali_Koleroga`) -> HTTP 200, `intent='current_result_advice'`, `refused=False`.
 - **Zero Logging Verification:** Confirmed that uvicorn/FastAPI server logs contain only standard HTTP access lines (`"POST /api/chat HTTP/1.1" 200 OK`) and strictly zero farmer message text.
+
+### 5. Item 5 Content Checks & Formal Evaluation Documentation
+- **Key Retrieval Verifications Passed:**
+  - `"do you save my photo"` -> correctly returns `privacy`.
+  - `"which language does the app support"` -> correctly returns `languages`.
+  - `"my areca leaves are turning yellow what is wrong"` -> correctly returns `what_is_yld`.
+  - Automated unit test added in [test_chat_engine.py](file:///d:/dev/arecanut_web/backend/tests/test_chat_engine.py): `test_specific_content_queries()`.
+- **Unseen Dataset:** Verified [backend/tests/chat_unseen.csv](file:///d:/dev/arecanut_web/backend/tests/chat_unseen.csv) exists with exactly 20 unseen evaluation questions.
+- **Formal Evaluation Report:** Generated [docs/CHAT_EVALUATION.md](file:///d:/dev/arecanut_web/docs/CHAT_EVALUATION.md) directly from a real evaluation run:
+  - Dev-set accuracy: **64/64 (100.0%)**, 0 failures.
+  - Unseen-set accuracy: **15/20 (75.0%)**, exceeding 70% threshold.
+  - Safe outcome rate: **20/20 (100.0%)**.
+  - Invented doses: strictly **0**.
+  - Detailed listing and analysis of the 5 non-exact unseen questions.
