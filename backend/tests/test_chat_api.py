@@ -108,11 +108,12 @@ def test_chat_out_of_scope_refusal(client):
 
 
 def test_chat_confirm_refusal(client):
-    res = client.post("/api/chat", json={"message": "can you confirm for sure 100% this is the disease?", "language": "en"})
-    assert res.status_code == 200
-    data = res.json()
-    assert data["refused"] is True
-    assert data["intent"] == "safety_confirm"
+    for q in ["can you confirm for sure 100% this is the disease?", "is it confirmed koleroga"]:
+        res = client.post("/api/chat", json={"message": q, "language": "en"})
+        assert res.status_code == 200
+        data = res.json()
+        assert data["refused"] is True
+        assert data["intent"] == "safety_confirm"
 
 
 @pytest.mark.parametrize("cls_name", ["Healthy_Leaf", "Healthy_Nut", "Mahali_Koleroga", "Yellow_Leaf"])

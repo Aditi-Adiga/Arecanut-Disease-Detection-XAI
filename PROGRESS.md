@@ -180,3 +180,29 @@
   - Verified after a fallback reply that "What is Mahali?" and "When should I call an expert?" each appear exactly once.
   - Verified after a normal FAQ answer that at most 3 follow-up chips appear and no second starter row appears.
 - **Verification:** 26 vitest tests passing across 8 files; production build clean.
+
+### 3. Item 3 Line Endings Configuration
+- Added `.gitattributes` with `* text=auto`.
+- Committed separately as `chore: gitattributes` without renormalizing unrelated files.
+
+### 4. Item 4 Verification & Health Checks
+- **Test Counts:**
+  - Backend pytest: 58 passed, 0 failed.
+  - Frontend vitest: 26 passed, 0 failed across 8 files.
+  - Production build: clean build in 2.4s.
+- **Secrets Scan:**
+  - Working tree: 0 secrets, 0 .env files.
+  - Git history (`feature/chatbot-and-mobile`): 0 secrets found.
+- **Live Endpoint Verification (curl):**
+  - `GET /api/chat/chips?language=en` -> HTTP 200, returns 7 valid starter chips.
+  - `GET /api/chat/status` -> HTTP 200, `{"online_enabled": false}`.
+  - `POST /api/chat` with "what is mahali" -> HTTP 200, `intent='faq'`, `entry_id='what_is_koleroga'`, `refused=False`.
+  - `POST /api/chat` with "how many ml per litre" -> HTTP 200, `intent='safety_dose'`, `refused=True`.
+  - `POST /api/chat` with "i have a fever" -> HTTP 200, `intent='safety_health'`, `refused=True`.
+  - `POST /api/chat` with "what is the price of areca today" -> HTTP 200, `intent='out_of_scope'`, `refused=True`.
+  - `POST /api/chat` with "is it confirmed koleroga" -> Fixed bug in `_CONFIRM` regex matching to include `confirm\w*` and eliminate disease-name bypass; returns HTTP 200, `intent='safety_confirm'`, `refused=True`.
+  - `POST /api/chat` with empty message -> HTTP 422 Unprocessable Content.
+  - `POST /api/chat` with 301-character message -> HTTP 422 Unprocessable Content.
+  - `POST /api/chat` with bad language ("es") -> HTTP 422 Unprocessable Content.
+  - `POST /api/chat` with "what should i do now" (context class `Mahali_Koleroga`) -> HTTP 200, `intent='current_result_advice'`, `refused=False`.
+- **Zero Logging Verification:** Confirmed that uvicorn/FastAPI server logs contain only standard HTTP access lines (`"POST /api/chat HTTP/1.1" 200 OK`) and strictly zero farmer message text.

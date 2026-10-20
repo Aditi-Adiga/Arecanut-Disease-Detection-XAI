@@ -43,7 +43,7 @@ _HEALTH = re.compile(r"\b(fever|cough|headache|pregnan\w*|snake|poison\w*|swallo
                      r"my (child|son|daughter|baby|wife|husband)|i feel (sick|unwell|dizzy))\b", re.I)
 _OUT = re.compile(r"\b(price|rate today|market|weather|forecast|will it rain|rain tomorrow|subsidy|loan|insurance|coconut|paddy|rice|banana|"
                   r"pepper|cocoa|rubber|tomato|cow|goat)\b", re.I)
-_CONFIRM = re.compile(r"\b(confirm|diagnos\w*|100 ?%|for sure|certain)\b", re.I)
+_CONFIRM = re.compile(r"\b(confirm\w*|diagnos\w*|100 ?%|for sure|certain)\b", re.I)
 _ADVICE = re.compile(r"\b(what (should|do|can|shall) i do|what now|next step|what to do|advice|how (do|can|to) (i )?(treat|fix|save))\b", re.I)
 
 
@@ -141,7 +141,7 @@ class ChatEngine:
         if _OUT.search(low):
             return self._reply(s["out_of_scope"], "out_of_scope", refused=True, lang=language)
         qtok = tokens(msg)
-        if _CONFIRM.search(low) and not (set(qtok) & {"koleroga", "yellow"}):
+        if _CONFIRM.search(low):
             return self._reply(s["confirm"], "safety_confirm", refused=True, lang=language)
         if ctx.get("class") and _ADVICE.search(low) and not (set(qtok) & _TOPIC):
             r = self._current_result_advice(ctx, language)
