@@ -4,7 +4,7 @@ import Navbar from './components/Navbar';
 import ImageUpload from './components/ImageUpload';
 import PredictionResult from './components/PredictionResult';
 import DiseaseInfo from './components/DiseaseInfo';
-import HelpChat from './components/HelpChat';
+import ChatAssistant from './components/ChatAssistant';
 import { Welcome, LanguagePicker } from './components/Welcome';
 import { LanguageProvider } from './locales/LanguageContext';
 import { LANGUAGES, translator } from './locales/messages';
@@ -108,8 +108,7 @@ export default function App() {
           {view==='guide'&&<><section className="view-intro"><span className="eyebrow">{t('guideNav')}</span><h1>{t('guideIntro')}</h1><p>{t('guideDescription')}</p></section><DiseaseInfo info={info} classId={guideClass} onSelect={setGuideClass} referenceOnly currentResultName={result && info?.classes[result.class_id]?.short_name}/></>}
           {view==='history'&&<><section className="view-intro"><span className="eyebrow">{t('historyKicker')}</span><h1>{t('historyTitle')}</h1><p>{t('historyDescription')}</p></section>{history.length?<><div className="history-toolbar"><span>{t('savedScans',{count:history.length})}</span><button className="text-button" onClick={() => setConfirmClear(!confirmClear)}><Trash2 size={16}/>{t('clearHistory')}</button></div>{confirmClear&&<div className="notice">{t('deleteQuestion')}<button className="text-button" onClick={removeSavedScans}>{t('deleteScans')}</button><button className="text-button" onClick={() => setConfirmClear(false)}>{t('cancel')}</button></div>}<div className="history-grid">{history.map(entry=><button className="history-card card" key={entry.id} onClick={() => openHistory(entry)}><img src={entry.result.original_image} alt={t('uploadTitle')}/><div><span className={'history-status '+entry.result.status}>{t(entry.result.status==='unsure'?'unsureLabel':entry.result.status==='healthy'?'healthyLabel':'suspectedLabel')}</span><h3>{info?.classes[entry.result.class_id]?.short_name||entry.result.display_name}</h3><p>{entry.name}</p><small><Clock3 size={13}/>{new Date(entry.createdAt).toLocaleString(locale)}</small><span className="history-open">{t('viewResult')}<ArrowRight size={16}/></span></div></button>)}</div></>:<div className="empty-history card"><Clock3 size={40}/><h2>{t('emptyTitle')}</h2><p>{t('emptyDescription')}</p><button className="primary-button" onClick={() => setView('scan')}>{t('startScan')}<ArrowRight size={18}/></button></div>}</>}
           <footer><div className="footer-brand"><Leaf size={20}/><strong>ArecaLens</strong><span>{t('footer')}</span></div><p>{t('footerResearch')}</p><p className="footer-note">{t('scope')}</p>{language!=='en'&&<p className="footer-note">{t('translationDraft')}</p>}</footer>
-        </main>
-        <HelpChat info={info} result={shownResult} guideClass={guideClass}/>
+        </main><ChatAssistant/>
       </>}
   </LanguageProvider>;
 }

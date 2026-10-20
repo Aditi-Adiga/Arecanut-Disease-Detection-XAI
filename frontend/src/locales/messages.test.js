@@ -15,9 +15,8 @@ test('language formatting replaces values without editing a numeric score', () =
   expect(localizeResult(result,null,translator('kn'))).toBe(result);
 });
 
-test('local help and reference notices exist in all four selected languages', () => {
+test('reference notices exist in all four selected languages', () => {
   for (const { code } of LANGUAGES) {
-    expect(extraMessages[code].chatWelcome).toBeTruthy();
     expect(extraMessages[code].generalGuideNote).toBeTruthy();
     expect(extraMessages[code].draftHealthyDescription).toBeTruthy();
   }

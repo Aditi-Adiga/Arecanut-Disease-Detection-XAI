@@ -1,6 +1,6 @@
 # ArecaLens — Arecanut Disease Detection with XAI
 
-React + Vite frontend, FastAPI + TensorFlow backend. Uses the supplied trained MobileNetV3Small and deterministic class activation maps (CAM), with no external AI API.
+React + Vite frontend, FastAPI + TensorFlow backend. Uses the supplied trained MobileNetV3Small and deterministic class activation maps (CAM). The chatbot works offline by default and can optionally use a server-configured AI provider.
 
 ## Run the completed local app
 
@@ -88,7 +88,33 @@ Investigate any difference before describing Colab/app parity as verified.
 - `GET /api/health`: model availability.
 - `GET /api/diseases?language=en`: reference information in `en`, `kn`, `hi` or `ml`.
 - `POST /api/predict?language=en`: multipart `file`; returns probabilities, result status, CAM overlay, resized input and deterministic explanation. Language changes text only.
+- `GET /api/chat/status`: whether optional online chat is configured.
+- `POST /api/chat`: JSON `{ "message": "...", "mode": "offline", "language": "en", "history": [] }`; returns `{ "answer": "..." }`. Offline answers use the local guide and app help. Questions are limited to 1,000 characters; up to six recent user/assistant turns may be included for online follow-ups.
 - `/docs`: interactive FastAPI API documentation.
+
+### Optional online chatbot
+
+Offline chat is the default and requires no extra package, provider account, or network access. To enable online answers, configure these environment variables on the **backend server only**:
+
+- `CHATBOT_API_KEY` (required): provider API key.
+- `CHATBOT_API_URL` (optional): full OpenAI-compatible chat-completions HTTPS endpoint; defaults to `https://api.openai.com/v1/chat/completions`.
+- `CHATBOT_MODEL` (optional): provider model name; defaults to `gpt-4o-mini`.
+
+For local PowerShell development, enter the key at a hidden prompt, then start the backend in the same terminal:
+
+```powershell
+$secret = Read-Host "Enter your AI provider API key" -AsSecureString
+$env:CHATBOT_API_KEY = [System.Net.NetworkCredential]::new("", $secret).Password
+$env:CHATBOT_MODEL = "gpt-4o-mini"
+Set-Location D:\dev\arecanut_web
+.\backend\.venv\Scripts\python.exe -m uvicorn backend.main:app --host 127.0.0.1 --port 8000
+```
+
+For Render or another host, add `CHATBOT_API_KEY` as a private server environment variable in its dashboard; do not add the secret to `render.yaml`. Restart/redeploy the backend after configuration. Check `GET /api/chat/status`; online mode is available only when a key, HTTPS endpoint, and model are configured. Refresh the app after restarting the backend.
+
+When online mode is selected, the user's question, up to six recent chat turns, and relevant guide text are sent to the configured provider; **photos and scan history are not sent**. Provider usage may incur charges and is governed by that provider's privacy and retention policies. Keep the key out of frontend files, source control, and client-side environment variables. Online provider failures are shown to the user and do not silently switch modes.
+
+The assistant is informational, not diagnostic. Offline mode only retrieves supported app guidance and falls back when it cannot find a match. The online model is instructed not to diagnose or prescribe unverified chemical schedules. Both modes remind users that guide content is draft material requiring agricultural expert review.
 
 JPEG/PNG/WebP, maximum 10 MB and 24 MP. Images are decoded as RGB with TensorFlow and resized to 224×224 with `tf.image.resize(..., method="bilinear")`, raw float32 values in 0–255. The backbone contains normalization. The image is stretched like the training pipeline, not cropped. EXIF auto-rotation is deliberately not applied to avoid silently changing the supplied Colab loader.
 
@@ -99,7 +125,6 @@ Class order: Healthy_Leaf, Healthy_Nut, Mahali_Koleroga, Yellow_Leaf. Healthy re
 ## Data, history and limitations
 
 - Welcome page → language selection → photo screening. English, Kannada, Hindi and Malayalam are available across navigation, results, explanations and the guide. Regional translations are drafts pending native-speaker and agricultural review. Regional guides condense source guidance into basic care advice; they are not complete word-for-word translations of historical treatment instructions.
-- The in-page ArecaLens help panel answers from the already-loaded field guide and latest screening result. It makes no external chatbot/API call and is a fixed guide-based helper, not a generative diagnosis service. The field guide is general reference information and does not change the latest photo result.
 - History stores up to eight resized scans in localStorage on this browser/device; raw uploads are not saved to the backend filesystem. Deployment operators must separately control proxy/server logs and storage policies.
 - The disease guide is the supplied draft. Expert review of treatment guidance, especially historical doses and schedules, remains outstanding. The unverified Bordeaux recipe and items explicitly marked `verify` are not displayed.
 - The model has no unrelated-object/OOD class. It can confidently classify unsupported inputs. Use actual arecanut leaves/nuts and get expert confirmation.

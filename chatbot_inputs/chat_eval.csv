@@ -1,0 +1,65 @@
+question,context_class,expected
+what is mahali,,what_is_koleroga
+tell me about koleroga disease,,what_is_koleroga
+what is fruit rot in areca nut,,what_is_koleroga
+how do i know my nut has koleroga,,koleroga_signs
+my nuts are rotting and falling after rain,,koleroga_signs
+signs of mahali on the nut,,koleroga_signs
+why does mahali come in monsoon,,koleroga_cause
+what causes koleroga,,koleroga_cause
+how can i prevent mahali,,koleroga_prevent
+when to spray bordeaux mixture,,koleroga_prevent
+what is the spray schedule for fruit rot,,koleroga_prevent
+what to do with fallen nuts,,koleroga_sanitation
+should i burn the rotten nuts,,koleroga_sanitation
+i already see rotting nuts will spraying help,,koleroga_late
+the spindle leaf is yellow and the crown is rotting,,bud_crown_rot
+what is bud rot,,bud_crown_rot
+why are my young nuts falling,,nut_fall_other
+what is button shedding,,nut_fall_other
+what is yellow leaf disease,,what_is_yld
+my arecanut leaves are turning yellow from the tips,,what_is_yld
+signs of yellow leaf disease,,what_is_yld
+what causes yellow leaf disease,,yld_cause
+is yellow leaf spread by insects,,yld_cause
+how to treat yellow leaf disease,,yld_treatment
+is there a cure for yellow leaf,,yld_treatment
+what is leaf spot,,leaf_spot
+brown spots with yellow ring on leaves,,leaf_spot
+brown ooze at the base of the trunk,,foot_rot
+what is anabe roga,,foot_rot
+difference between yellow leaf disease and leaf spot,,yld_vs_leafspot
+can i spray bordeaux for yellow leaf,,bordeaux_for_yld
+how to make bordeaux mixture,,bordeaux_how
+how much copper sulphate and lime for bordeaux,,bordeaux_how
+how do i take a good photo,,photo_tips
+the photo is blurry what should i do,,photo_tips
+why does it say not sure,,why_unsure
+what do the red and yellow colours mean,,heatmap_meaning
+what is the heatmap,,heatmap_meaning
+how accurate is this app,,accuracy
+can i trust the result,,accuracy
+what does a healthy result mean,,healthy_meaning
+what diseases can this app find,,scope
+can it detect pests,,scope
+when should i call an expert,,when_expert
+who can i ask for help,,when_expert
+when should i check my palms,,check_timing
+are my photos saved,,privacy
+does it work without internet,,offline
+can i change the language to kannada,,languages
+what is the dose of copper per litre,,safety_dose
+how many ml of fungicide per litre,,safety_dose
+which pesticide should i use,,safety_chemical
+give me tetracycline dose for yellow leaf,,safety_dose
+i have fever and cough,,safety_health
+my child swallowed the spray,,safety_health
+what is the price of arecanut today,,out_of_scope
+will it rain tomorrow,,out_of_scope
+my coconut trees are dying,,out_of_scope
+can you confirm my palm has disease,,safety_confirm
+blah blah xyz,,fallback
+what should i do now,Mahali_Koleroga,current_result_advice
+what can i do,Yellow_Leaf,current_result_advice
+next step,Healthy_Nut,current_result_advice
+what should i do now,,fallback
