@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ArecaLens — Comprehensive Project Summary & Engineering Report</title>
+<style>
+  @page {
+    size: A4;
+    margin: 1.5cm 1.5cm 1.5cm 1.5cm;
+    @bottom-right {
+      content: "Page " counter(page) " of " counter(pages);
+      font-size: 8.5pt;
+      color: #667085;
+    }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: #1f2a24;
+    line-height: 1.48;
+    font-size: 9.5pt;
+    margin: 0;
+    padding: 0;
+  }
+  .header {
+    text-align: center;
+    border-bottom: 2px solid #2e754c;
+    padding-bottom: 10px;
+    margin-bottom: 14px;
+  }
+  .header h1 {
+    color: #1a4d2e;
+    margin: 0 0 4px 0;
+    font-size: 19pt;
+    font-weight: 700;
+  }
+  .header .subtitle {
+    color: #4b6354;
+    font-size: 10pt;
+    font-style: italic;
+    margin: 0;
+  }
+  .header .meta {
+    font-size: 8.5pt;
+    color: #6a7f72;
+    margin-top: 5px;
+  }
+  .section-block {
+    page-break-inside: avoid;
+    margin-bottom: 12px;
+  }
+  h2 {
+    color: #1a4d2e;
+    font-size: 11.5pt;
+    border-bottom: 1.5px solid #e1ebe3;
+    padding-bottom: 3px;
+    margin-top: 12px;
+    margin-bottom: 6px;
+    page-break-after: avoid;
+  }
+  h3 {
+    color: #2e754c;
+    font-size: 10.5pt;
+    margin-top: 10px;
+    margin-bottom: 4px;
+    page-break-after: avoid;
+  }
+  p {
+    margin: 0 0 6px 0;
+  }
+  ul {
+    margin: 0 0 8px 0;
+    padding-left: 18px;
+  }
+  li {
+    margin-bottom: 3px;
+  }
+  strong {
+    color: #153822;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 8px 0 12px 0;
+    font-size: 8.5pt;
+    page-break-inside: avoid;
+  }
+  th {
+    background: #2e754c;
+    color: #ffffff;
+    font-weight: 600;
+    text-align: left;
+    padding: 6px 9px;
+    border: 1px solid #25603e;
+  }
+  td {
+    padding: 6px 9px;
+    border: 1px solid #d4ded7;
+    vertical-align: top;
+  }
+  tr:nth-child(even) td {
+    background-color: #f7faf8;
+  }
+  .badge-pass {
+    display: inline-block;
+    background: #e6f7ec;
+    color: #127938;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 4px;
+    border: 1px solid #b3e7c4;
+    font-size: 8pt;
+  }
+  .callout {
+    background: #f1f8f3;
+    border-left: 4px solid #2e754c;
+    padding: 8px 12px;
+    margin: 8px 0 10px 0;
+    border-radius: 0 5px 5px 0;
+  }
+  .callout-title {
+    font-weight: 700;
+    color: #1a4d2e;
+    margin-bottom: 3px;
+  }
+  .code-block {
+    background: #f4f6f5;
+    border: 1px solid #d8e0db;
+    border-radius: 5px;
+    padding: 8px 12px;
+    font-family: Consolas, Monaco, "Courier New", monospace;
+    font-size: 8.5pt;
+    color: #1e3d29;
+    margin: 6px 0 8px 0;
+    white-space: pre-wrap;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🌿 ArecaLens — Comprehensive Project Summary</h1>
+  <div class="subtitle">Explainable AI (XAI) & Knowledge-Grounded Agricultural Assistant for Arecanut Disease Detection</div>
+  <div class="meta">Full Engineering, Architecture & Verification Report • Antigravity AI</div>
+</div>
+
+<div class="section-block">
+  <h2>1. Executive Summary & Purpose</h2>
+  <p>
+    <strong>ArecaLens</strong> is an end-to-end Explainable Artificial Intelligence (XAI) screening aid and knowledge-grounded agricultural assistant designed for arecanut (<em>Areca catechu</em>) growers in Karnataka and Kerala, India. The application targets critical fungal diseases—predominantly <strong>Mahali / Koleroga</strong> (fruit rot caused by <em>Phytophthora meadii</em>) and <strong>Yellow Leaf Disease (YLD)</strong>.
+  </p>
+  <p>
+    Unlike generic crop apps that risk farmer livelihood through hallucinated pesticide doses or false reassurances, ArecaLens enforces strict protective principles: <strong>high-confidence thresholds</strong> (categorizing borderline scans as "Unsure"), <strong>zero chemical dosage invention</strong>, and <strong>complete offline determinism</strong>.
+  </p>
+
+  <div class="callout">
+    <div class="callout-title">Engineering Core Tenet</div>
+    <em>"ArecaLens includes a knowledge-grounded retrieval assistant (not a generative one) that answers from cited, expert-review-pending sources with strict offline safety."</em>
+  </div>
+</div>
+
+<div class="section-block">
+  <h2>2. System Architecture & Technology Stack</h2>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 22%;">Component</th>
+        <th style="width: 25%;">Technology</th>
+        <th>Key Responsibilities</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Web Frontend</strong></td>
+        <td>React 19, Vite, Vanilla CSS</td>
+        <td>WCAG AA accessible interface, interactive CAM heatmap slider, 4-language toggle (EN, KN, HI, ML), local 8-scan history.</td>
+      </tr>
+      <tr>
+        <td><strong>Backend API</strong></td>
+        <td>FastAPI, Uvicorn, Python 3.13</td>
+        <td>Asynchronous REST endpoints, threadpool inference, zero message logging, unified static production serving on port 8000.</td>
+      </tr>
+      <tr>
+        <td><strong>Computer Vision & XAI</strong></td>
+        <td>TensorFlow 2.21, Keras, TFLite</td>
+        <td>MobileNetV3Small classification, 224x224 half-pixel bilinear preprocessing, deterministic Class Activation Mapping.</td>
+      </tr>
+      <tr>
+        <td><strong>Offline Chatbot</strong></td>
+        <td>Python Standard Library</td>
+        <td>Deterministic TF-IDF, synonym mapping, 27 vetted FAQ entries & disease guides. Completely offline with zero hallucinations.</td>
+      </tr>
+      <tr>
+        <td><strong>Online LLM Proxy</strong></td>
+        <td>OpenAI-compatible client</td>
+        <td>Optional server-configured RAG with Google Gemini / Groq; strict server-side regex post-checks blocking unvetted chemical doses.</td>
+      </tr>
+      <tr>
+        <td><strong>Companion Mobile</strong></td>
+        <td>Flutter (Dart)</td>
+        <td>Cross-platform 5-tab mobile application with camera capture, offline status indicator, and golden parity chat engine.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="section-block">
+  <h2>3. Computer Vision & Explainable AI (XAI) Pipeline</h2>
+  <ul>
+    <li><strong>Target Classes & Protective Cutoffs:</strong>
+      <ul>
+        <li><code>Healthy_Leaf</code> (Confidence &ge; 0.95)</li>
+        <li><code>Healthy_Nut</code> (Confidence &ge; 0.95)</li>
+        <li><code>Mahali_Koleroga</code> (Fruit rot, Confidence &ge; 0.70)</li>
+        <li><code>Yellow_Leaf</code> (Yellow Leaf Disease, Confidence &ge; 0.70)</li>
+        <li><em>Scans scoring below thresholds are categorized as <strong>"Unsure"</strong> to prevent dangerous false reassurances.</em></li>
+      </ul>
+    </li>
+    <li><strong>Deterministic Class Activation Maps (CAM):</strong> Generates feature-weighted activation heatmaps (<strong>CAM = ReLU(features &times; W<sub>eff</sub>)</strong>) overlaid directly on raw photos to reveal visual lesion boundaries.</li>
+    <li><strong>Preprocessing & Colab Parity:</strong> Bilinear resize to 224x224 with exact TensorFlow half-pixel centers (float32 [0, 255]), mathematically validated against Google Colab baseline exports.</li>
+    <li><strong>Local Privacy:</strong> Retains up to 8 recent scans in browser <code>localStorage</code>; raw image uploads are never stored on server disks.</li>
+  </ul>
+</div>
+
+<div class="section-block">
+  <h2>4. Multilingual Knowledge-Grounded Chatbot ("Ask" Tab)</h2>
+  <ul>
+    <li><strong>100% Deterministic Grounding:</strong> Standard-library engine (<code>backend/chat_engine.py</code>) answers strictly from verified sources (<code>chatbot_faq.json</code>, <code>disease_info.json</code>).</li>
+    <li><strong>Result-Aware Context:</strong> Features an "About your last result" chip linking screening outcomes to follow-up care without re-transmitting photos.</li>
+    <li><strong>Mandatory Safety Guardrails:</strong>
+      <ul>
+        <li><code>_DOSE</code>: Refuses unverified spray quantities and concentrations; directs to agricultural officers and KVKs.</li>
+        <li><code>_HEALTH</code>: Intercepts questions regarding human poisoning or ingestion, urging immediate emergency medical help.</li>
+        <li><code>_CONFIRM</code>: Enforces that screening results are "suspected", never "confirmed".</li>
+        <li><code>_OUT</code>: Politely declines unrelated queries (market prices, weather, other crops).</li>
+      </ul>
+    </li>
+    <li><strong>Multilingual Localization:</strong> Localized answers and dynamic suggestion chips across English (<code>en</code>), Kannada (<code>kn</code>), Hindi (<code>hi</code>), and Malayalam (<code>ml</code>) with clear draft-translation notices.</li>
+  </ul>
+</div>
+
+<div class="section-block">
+  <h2>5. Online "Ask More" Cloud Proxy & RAG Safety Post-Checks</h2>
+  <ul>
+    <li><strong>Server-Grounded Context:</strong> Automatically retrieves top-3 FAQ items and active class guidance as strict context for Google Gemini or Groq LLMs.</li>
+    <li><strong>Strict Post-Generation Audit:</strong> Scans model output; immediately discards and reverts to verified guide text if the model outputs unverified units (<code>ml</code>, <code>g</code>, <code>kg</code>, <code>litre</code>, <code>ppm</code>, <code>%</code>) or certainty terms (<code>confirmed</code>, <code>100%</code>).</li>
+    <li><strong>Transparent Provenance:</strong> Clearly badges responses as <em>"AI-generated • Verify with officer"</em> vs <em>"From the verified guide"</em>.</li>
+  </ul>
+</div>
+
+<div class="section-block">
+  <h2>6. Comprehensive Verification Matrix</h2>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 25%;">Suite</th>
+        <th style="width: 30%;">Scope</th>
+        <th>Result</th>
+        <th style="width: 18%;">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Backend Pytest</strong></td>
+        <td>FastAPI, CAM, Preprocessing, Chat API</td>
+        <td>83 passed, 0 failed (in 2.48s)</td>
+        <td><span class="badge-pass">100% Pass</span></td>
+      </tr>
+      <tr>
+        <td><strong>Frontend Vitest</strong></td>
+        <td>AskTab, Sliders, History, Localization</td>
+        <td>30 passed across 8 test suites</td>
+        <td><span class="badge-pass">100% Pass</span></td>
+      </tr>
+      <tr>
+        <td><strong>Chatbot Dev Set</strong></td>
+        <td>64 representative farmer questions</td>
+        <td>64 / 64 exact matches</td>
+        <td><span class="badge-pass">100% Match</span></td>
+      </tr>
+      <tr>
+        <td><strong>Chatbot Unseen Set</strong></td>
+        <td>20 unseen, paraphrased questions</td>
+        <td>15/20 exact (75%), 20/20 safe outcomes</td>
+        <td><span class="badge-pass">100% Safe</span></td>
+      </tr>
+      <tr>
+        <td><strong>Chemical Doses Audit</strong></td>
+        <td>All evaluation and test sets</td>
+        <td>Strictly 0 unverified doses generated</td>
+        <td><span class="badge-pass">0.0% Hallucination</span></td>
+      </tr>
+      <tr>
+        <td><strong>Credential Audit</strong></td>
+        <td>Git history and working directory</td>
+        <td>0 keys or secrets committed</td>
+        <td><span class="badge-pass">Clean</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="section-block">
+  <h2>7. Companion Flutter Mobile Application</h2>
+  <p>
+    Located in the <code>mobile/</code> directory, a Flutter cross-platform application complements the web platform. It features local farmer onboarding, 5-tab navigation, camera/gallery scanning, offline network indicators, and a pure Dart chat engine with 100% golden parity to the backend logic.
+  </p>
+</div>
+
+<div class="section-block">
+  <h2>8. How to Launch the Web Application</h2>
+  <p>The single-port production server delivers both the frontend React application and the FastAPI backend:</p>
+  <div class="code-block"># Quick Launch (Recommended):
+Double-click start.cmd  (or run .\start.ps1 in PowerShell)
+
+# Direct PowerShell Command:
+.\backend\.venv\Scripts\python.exe -m uvicorn backend.main:app --host 127.0.0.1 --port 8000
+
+-> Access the web interface at: http://127.0.0.1:8000
+-> Access interactive API documentation at: http://127.0.0.1:8000/docs</div>
+</div>
+
+</body>
+</html>

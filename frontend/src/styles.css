@@ -72,26 +72,10 @@
 .ask-bot-meta{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
 .ask-meta-badge{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;padding:4px 9px;border-radius:12px}
 .ask-meta-badge.verified{background:#e4eed4;color:#2b5434}
-.ask-meta-badge.ai-generated{background:#f1f8ed;color:#1f562d;border:1px solid #c9e0bf}
 .ask-meta-badge.expert-review{background:#fcf0db;color:#9b6118;border:1px solid #ecd5a9}
 
 .ask-language-notice{padding:8px 12px;background:#fef9e8;border:1px solid #f2dfa8;border-radius:7px;font-size:13px;color:#856218}
-.ask-online-error-notice{padding:8px 12px;background:#fff8e8;border:1px solid #f6e2af;border-radius:7px;font-size:13px;color:#855c14}
 .ask-answer-text{font-size:16px;line-height:1.65;white-space:pre-line;color:#203829}
-
-.ask-online-actions{margin-top:6px}
-.ask-more-online-btn{min-height:44px;display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;transition:all .18s;border:1px solid #6b9e73;background:#eff7ec;color:#194e24}
-.ask-more-online-btn:hover:not(:disabled){background:#e2f0dc;border-color:#55875d}
-.ask-more-online-btn.disabled,.ask-more-online-btn:disabled{opacity:0.65;cursor:not-allowed;background:#f3f5f1;border-color:#d6dcd2;color:#6e7d6c}
-.ask-disabled-reason{font-size:11px;font-weight:normal;margin-left:4px}
-
-.ask-modal-backdrop{position:fixed;inset:0;background:rgba(18,36,25,0.48);display:flex;align-items:center;justify-content:center;z-index:1000;padding:16px}
-.ask-modal-card{background:#fff;border-radius:12px;max-width:440px;width:100%;padding:22px;box-shadow:0 10px 25px rgba(0,0,0,0.18);border:1px solid #e1e9d7;display:flex;flex-direction:column;gap:12px}
-.ask-modal-card h3{font-size:18px;color:#1c392b;margin:0}
-.privacy-point{font-size:14px;line-height:1.5;margin:6px 0}
-.privacy-point.sent{color:#21592c;font-weight:500}
-.privacy-point.not-sent{color:#6a7c67}
-.ask-modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:10px}
 
 .ask-sources-section{margin-top:6px;padding-top:10px;border-top:1px solid #e9ede1}
 .ask-sources-toggle{min-height:44px;min-width:44px;padding:6px 12px;background:none;border:1px solid #d9e3cc;border-radius:6px;font-size:13px;color:#4f6d4e;font-weight:550;display:inline-flex;align-items:center}

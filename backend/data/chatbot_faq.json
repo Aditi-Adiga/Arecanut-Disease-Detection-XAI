@@ -1204,15 +1204,15 @@
         "upload",
         "photo"
       ],
-      "answer": "Scan history is stored in the browser on the device (up to 8 resized scans). Raw uploads are not saved to the backend filesystem. The chat does not send your photo. Chat text is not stored on the server. Hosting operators control their own server logs.",
+      "answer": "To check a photo, the app sends it to the app server. The app does not keep the photo there. Your last few results are kept as small pictures in your own browser, and you can remove them with 'Clear history'.",
       "sources": [],
       "classes": [],
       "needs_expert_review": false,
       "deployment_dependent": true,
       "i18n": {
-        "kn": "ಸ್ಕ್ಯಾನ್ ಇತಿಹಾಸವನ್ನು ನಿಮ್ಮ ಬ್ರೌಸರ್‌ನಲ್ಲಿ ಮಾತ್ರ ಸಂಗ್ರಹಿಸಲಾಗುತ್ತದೆ (8 ಚಿಕ್ಕ ಚಿತ್ರಗಳವರೆಗೆ). ಅಪ್‌ಲೋಡ್ ಮಾಡಿದ ಫೋಟೋಗಳನ್ನು ಸರ್ವರ್‌ನಲ್ಲಿ ಉಳಿಸಲಾಗುವುದಿಲ್ಲ. ಚಾಟ್ ನಿಮ್ಮ ಫೋಟೋವನ್ನು ಕಳುಹಿಸುವುದಿಲ್ಲ ಮತ್ತು ಸಂದೇಶಗಳನ್ನು ಸರ್ವರ್‌ನಲ್ಲಿ ಸಂಗ್ರಹಿಸುವುದಿಲ್ಲ.",
-        "hi": "स्कैन इतिहास केवल आपके ब्राउज़र में सुरक्षित रहता है (अधिकतम 8 छोटी छवियाँ)। अपलोड की गई फोटो सर्वर पर सहेजी नहीं जातीं। चैट आपकी फोटो नहीं भेजता और संदेश सर्वर पर स्टोर नहीं होते।",
-        "ml": "സ്കാൻ വിവരങ്ങൾ നിങ്ങളുടെ ബ്രൗസറിൽ മാത്രമേ സൂക്ഷിക്കുന്നുള്ളൂ (പരമാവധി 8 ചെറിയ ചിത്രങ്ങൾ). അപ്‌ലോഡ് ചെയ്ത ചിത്രങ്ങൾ സെർവറിൽ സൂക്ഷിക്കുന്നില്ല. ചാറ്റ് നിങ്ങളുടെ ചിത്രം അയക്കുന്നില്ല, സന്ദേശങ്ങൾ സെർവറിൽ സൂക്ഷിക്കുന്നില്ല."
+        "kn": "ಫೋಟೋ ಪರಿಶೀಲಿಸಲು, ಅಪ್ಲಿಕೇಶನ್ ಅದನ್ನು ಅಪ್ಲಿಕೇಶನ್ ಸರ್ವರ್‌ಗೆ ಕಳುಹಿಸುತ್ತದೆ. ಅಪ್ಲಿಕೇಶನ್ ಫೋಟೋವನ್ನು ಅಲ್ಲಿ ಉಳಿಸಿಕೊಳ್ಳುವುದಿಲ್ಲ. ನಿಮ್ಮ ಕೊನೆಯ ಕೆಲವು ಫಲಿತಾಂಶಗಳನ್ನು ನಿಮ್ಮ ಬ್ರೌಸರ್‌ನಲ್ಲಿಯೇ ಸಣ್ಣ ಚಿತ್ರಗಳಾಗಿ ಇರಿಸಲಾಗುತ್ತದೆ, ಮತ್ತು 'ಇತಿಹಾಸ ಅಳಿಸಿ' ಮೂಲಕ ನೀವು ಅವುಗಳನ್ನು ತೆಗೆದುಹಾಕಬಹುದು.",
+        "hi": "फोटो की जाँच के लिए, ऐप इसे ऐप सर्वर पर भेजता है। ऐप फोटो को वहाँ नहीं रखता है। आपके पिछले कुछ परिणाम आपके अपने ब्राउज़र में छोटी तस्वीरों के रूप में रहते हैं, और आप उन्हें 'इतिहास मिटाएँ' से हटा सकते हैं।",
+        "ml": "ഒരു ചിത്രം പരിശോധിക്കാൻ, ആപ്പ് അത് ആപ്പ് സെർവറിലേക്ക് അയയ്ക്കുന്നു. ആപ്പ് അവിടെ ചിത്രം സൂക്ഷിക്കുന്നില്ല. നിങ്ങളുടെ അവസാനത്തെ ചില ഫലങ്ങൾ നിങ്ങളുടെ സ്വന്തം ബ്രൗസറിൽ ചെറിയ ചിത്രങ്ങളായി സൂക്ഷിക്കുന്നു, 'ചരിത്രം നീക്കുക' എന്നതിലൂടെ നിങ്ങൾക്ക് അവ നീക്കംചെയ്യാം."
       },
       "questions_i18n": {
         "kn": [
@@ -1244,15 +1244,15 @@
         "signal",
         "connection"
       ],
-      "answer": "The app runs on a laptop without internet after it is installed and while the local server is running. A phone using an online deployment needs internet for photo screening.",
+      "answer": "This version needs a connection to the app server to check a photo. A version that works fully on the phone without internet is planned.",
       "sources": [],
       "classes": [],
       "needs_expert_review": false,
       "deployment_dependent": true,
       "i18n": {
-        "kn": "ಸ್ಥಳೀಯ ಸರ್ವರ್ ಚಾಲನೆಯಲ್ಲಿರುವಾಗ ಲ್ಯಾಪ್ಟಾಪ್‌ನಲ್ಲಿ ಇಂಟರ್ನೆಟ್ ಇಲ್ಲದೆಯೂ ಅಪ್ಲಿಕೇಶನ್ ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತದೆ. ಆನ್‌ಲೈನ್ ನಿಯೋಜನೆಯನ್ನು ಬಳಸುವ ಮೊಬೈಲ್ ಫೋನ್‌ಗೆ ಫೋಟೋ ತಪಾಸಣೆಗೆ ಇಂಟರ್ನೆಟ್ ಅಗತ್ಯವಿದೆ.",
-        "hi": "लोकल सर्वर चलने पर लैपटॉप में बिना इंटरनेट के भी ऐप काम करता है। ऑनलाइन सेवा से जुड़े मोबाइल फोन पर फोटो जाँचने के लिए इंटरनेट आवश्यक है।",
-        "ml": "ലോക്കൽ സെർവർ പ്രവർത്തിക്കുമ്പോൾ ലാപ്‌ടോപ്പിൽ ഇന്റർനെറ്റ് ഇല്ലാതെയും ആപ്പ് പ്രവർത്തിക്കും. ഓൺലൈൻ സെർവർ ഉപയോഗിക്കുന്ന മൊബൈൽ ഫോണിൽ ചിത്രം പരിശോധിക്കാൻ ഇന്റർനെറ്റ് വേണം."
+        "kn": "ಫೋಟೋ ಪರಿಶೀಲಿಸಲು ಈ ಆವೃತ್ತಿಗೆ ಅಪ್ಲಿಕೇಶನ್ ಸರ್ವರ್‌ಗೆ ಸಂಪರ್ಕದ ಅಗತ್ಯವಿದೆ. ಇಂಟರ್ನೆಟ್ ಇಲ್ಲದೆ ಫೋನ್‌ನಲ್ಲಿ ಸಂಪೂರ್ಣವಾಗಿ ಕಾರ್ಯನಿರ್ವಹಿಸುವ ಆವೃತ್ತಿಯನ್ನು ಯೋಜಿಸಲಾಗಿದೆ.",
+        "hi": "फोटो जाँचने के लिए इस संस्करण को ऐप सर्वर से कनेक्शन की आवश्यकता होती है। बिना इंटरनेट के फोन पर पूरी तरह से काम करने वाले संस्करण की योजना है।",
+        "ml": "ഒരു ചിത്രം പരിശോധിക്കാൻ ഈ പതിപ്പിന് ആപ്പ് സെർവറുമായി ബന്ധം ആവശ്യമാണ്. ഇന്റർനെറ്റ് ഇല്ലാതെ ഫോണിൽ പൂർണ്ണമായി പ്രവർത്തിക്കുന്ന ഒരു പതിപ്പ് ആസൂത്രണം ചെയ്തിട്ടുണ്ട്."
       },
       "questions_i18n": {
         "kn": [
@@ -1329,7 +1329,7 @@
       "title": "Disease management strategies in arecanut and cocoa, Extension Publication No. 69",
       "publisher": "ICAR-CPCRI, Regional Station Vittal",
       "year": "1999",
-      "url": "https://cpcri.icar.gov.in/filemgr/webfs/publication/disease_management_strategies_in_arecanut_and_cocoa(eng)_1.pdf",
+      "url": "https://cpcri.gov.in/filemgr/webfs/publication/disease_management_strategies_in_arecanut_and_cocoa(eng)_1.pdf",
       "used_for": "Koleroga, bud and crown rot, Yellow Leaf Disease symptoms and management, leaf spot, foot rot, polythene covers"
     },
     "S3": {

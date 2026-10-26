@@ -2,13 +2,6 @@ import logging
 import pytest
 
 
-def test_chat_status(client, monkeypatch):
-    monkeypatch.setenv("ENABLE_LLM_CHAT", "0")
-    res = client.get("/api/chat/status")
-    assert res.status_code == 200
-    assert res.json() == {"online_enabled": False}
-
-
 def test_chat_chips(client):
     res = client.get("/api/chat/chips?language=en")
     assert res.status_code == 200
@@ -33,7 +26,7 @@ def test_chat_valid_question_and_response_shape(client):
     assert data["entry_id"] == "what_is_koleroga"
     assert data["refused"] is False
     assert data["ai_generated"] is False
-    assert data["answer_source"] == "guide"
+    assert data["answer_source"] == "engine"
     assert isinstance(data["needs_expert_review"], bool)
     assert isinstance(data["language_fallback"], bool)
     assert isinstance(data["suggestions"], list)
